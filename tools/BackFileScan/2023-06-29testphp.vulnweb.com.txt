@@ -1,0 +1,2 @@
+http://testphp.vulnweb.com/index.zip  size:2K
+http://testphp.vulnweb.com/index.bak  size:3K

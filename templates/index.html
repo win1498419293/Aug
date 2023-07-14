@@ -1,0 +1,201 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>AUG : 一款缝合多种工具的缝合怪</title>
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script>
+	<script src='https://cdn.bootcss.com/Chart.js/2.7.3/Chart.js'></script>
+	
+</head>
+<body>
+	<div class="panel panel-default" >
+		<div class="container">
+			<div class="jumbotron">
+				<h1>AUG</h1>
+				<h2>吾生也有涯，而知也无涯。以有涯随无涯，殆已！已而为知者，殆而已矣！为善无近名，为恶无近刑，缘督以为经，可以保身，可以全生，可以养亲，可以尽年。</h2>
+				<hr>
+				<div>	
+
+					<div class="panel-body">
+					
+					<div id="main" style="width: 600px;height:400px;"></div>
+   					 <script type="text/javascript">
+        				// 基于准备好的dom，初始化echarts实例
+        				var myChart = echarts.init(document.getElementById('main'));
+		 				var chartData = {{ .chartData | jsonify }};
+        					myChart.setOption({
+						title: {
+							        text: '漏洞数据总览',
+							        left: 'center'
+							    },
+							    tooltip: {
+							        trigger: 'item',
+							        formatter: '{a} <br/>{b} : {c} ({d}%)'
+							    },
+            					series : [
+                				{
+                                               name: '漏洞类型',
+                                               type: 'pie',    // 设置图表类型为饼图
+                                               radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                                               data:chartData
+               					 }
+           					 ],
+ 						title: {
+ 						text:'漏洞类型',
+ 							subtext:'纯属虚构',
+ 							},
+						emphasis: {
+							     itemStyle: {
+							                    shadowBlur: 10,
+							                    shadowOffsetX: 0,
+							                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+							                }
+							            }
+      								  })
+
+  						  </script>
+	
+					
+
+
+				            <p style="font-family: 楷体;font-size: 16pt;font-weight: bold">当前漏洞总数：{{ .vuls_total }}</p>
+				            <hr>
+				        </div>
+				    </div>
+			    <hr>
+				<!-- 子域详情 -->
+
+				<div> 
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<span class="label label-info">子域详情</span>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table table-hover" style="word-break:break-all; word-wrap:break-all;">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>URL</th>
+									<th>Subdomain</th>
+									<th>IP</th>
+								</tr>
+							</thead>
+							<tbody>
+										{{ range $subd:=.subds }}
+								<tr>
+  										<td>{{$subd.id}}</td>
+										<td>{{$subd.url}}</td>
+										<td>{{$subd.subdomain}}</td>
+										<td>{{$subd.ip}}</td>
+								</tr>
+									{{ end }}
+								
+							</tbody>
+						</table>
+						<div>
+						</div>
+					</div>
+				</div>
+				<!-- 任务详情 -->
+				<div> 
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<span class="label label-info">任务详情</span>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table table-hover" style="word-break:break-all; word-wrap:break-all;">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Target</th>
+									<th>StatusCode</th>
+									<th>Times</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{ range $task:=.tasks }}
+								<tr>
+  										<td>{{$task.id}}</td>
+										<td>{{$task.target}}</td>
+										<td>{{$task.statusCode}}</td>
+										<td>{{$task.times}}</td>
+								</tr>
+									{{ end }}
+							</tbody>
+						</table>
+						<div>
+						</div>
+					</div>
+				</div>
+				<!-- 漏洞详情 -->
+				<div> 
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<span class="label label-info">漏洞详情</span>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table table-hover" style="word-break:break-all; word-wrap:break-all;">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>URL</th>
+									<th>VNAME</th>
+									<th>CREATETIME</th>
+								</tr>
+							</thead>
+							<tbody>
+						
+								{{ range $index, $id := .vulns.Id }}
+									{{ $url := index $.vulns.Url $index }}
+									{{ $vname := index $.vulns.Vname $index }}
+									{{ $times := index $.vulns.CreateTime $index }}
+										<tr>
+											<td>{{ $id }}</td>
+											<td>{{ $url }}</td>
+											<td>{{ $vname }}</td>
+											<td>{{ $times }}</td>
+
+										</tr>
+								{{ end }}
+
+
+      							
+    								
+							</tbody>
+						</table>
+						 <div class="am-cf">
+  							共{{.totals}}条记录 共记{{.paginator.totalpages}} 页 当前页  {{.paginator.currpage}}
+  							<div class="am-fr">
+    							<ul class="am-pagination">
+   							 <a href="?page={{.paginator.firstpage}}">«</a>
+    							{{range $index,$page := .paginator.pages}}
+     								 <a  {{if eq $.paginator.currpage $page }} class="am-active"{{end}}												href="?page={{$page}}">{{$page}}</a> 
+    									{{end}}
+      							<a href="?page={{.paginator.lastpage}}">»</a>
+   													 </ul>
+  								</div>
+													</div>
+					</div>
+				</div>
+				<div>
+					<h3 class="footer-title">本系统禁止进行未授权、非法渗透测试</h3>
+					<p>请使用者遵守当地相关法律，勿用于非授权测试，如作他用所承受的法律责任一概与作者无关，下载使用即代表使用者同意上述观点。
+					<br/>
+					详情请访问: <a href="http://www.npc.gov.cn/npc/xinwen/2016-11/07/content_2001605.htm" target="_blank">《中华人民共和国网络安全法》</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+
+</html>

@@ -1,0 +1,5 @@
+[!] Name: Nginx ½âÎöÂ©¶´
+     Vulnerable: True
+     Url: http://testphp.vulnweb.com/
+     Payload: http://testphp.vulnweb.com//.php
+     About: https://vulhub.org/#/environments/nginx/nginx_parsing_vulnerability/

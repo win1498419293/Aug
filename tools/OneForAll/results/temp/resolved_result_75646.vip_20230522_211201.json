@@ -1,0 +1,2 @@
+{"name":"75646.vip.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":600,"type":"A","class":"IN","name":"75646.vip.","data":"103.94.78.251"}]},"resolver":"1.0.0.3:53"}
+{"name":"www.75646.vip.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":600,"type":"A","class":"IN","name":"www.75646.vip.","data":"103.94.78.251"}]},"resolver":"1.0.0.19:53"}

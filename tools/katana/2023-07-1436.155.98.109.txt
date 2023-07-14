@@ -1,0 +1,14 @@
+http://36.155.98.109:38080/login
+http://36.155.98.109:38080/epglanucher
+http://36.155.98.109:38080/ajax
+http://36.155.98.109:38080/ajax/libs
+http://36.155.98.109:38080/ajax/libs/validate
+http://36.155.98.109:38080/css
+http://36.155.98.109:38080/ajax/libs/blockUI
+http://36.155.98.109:38080/ajax/libs/layer
+http://36.155.98.109:38080/captcha
+http://36.155.98.109:38080/captcha/captchaImage
+http://36.155.98.109:38080/epglanucher/css
+http://36.155.98.109:38080/js
+http://36.155.98.109:38080/epglanucher/js
+http://36.155.98.109:38080/epglanucher/js/" + src + "

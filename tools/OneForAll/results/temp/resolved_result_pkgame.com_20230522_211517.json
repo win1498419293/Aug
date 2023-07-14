@@ -1,0 +1,2 @@
+{"name":"lg5.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"lg5.pkgame.com.","data":"47.93.201.8"}]},"resolver":"4.2.2.6:53"}
+{"name":"lg6.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"lg6.pkgame.com.","data":"47.93.201.8"}]},"resolver":"8.8.8.8:53"}

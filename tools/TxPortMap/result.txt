@@ -1,0 +1,6 @@
+101.132.27.196:25    smtp | 220 localhost.localdomain ESMTP Sendmail 8.14.7/8.14.7; Tue, 30 May 2023 16:30:22 +0800
+101.132.27.196:443   http [CommonName:www.shen021.com; DNSName:www.shen021.com] | [200] [nginx/1.12.2|PHP/5.6.31 MyQEE/3.0(stable)] 
+101.132.27.196:3306  
+101.132.27.196:21    ftp | 220 (vsFTPd 3.0.2)
+101.132.27.196:8021  http | [404] [nginx/1.12.2|PHP/5.6.31] 
+101.132.27.196:8081  http | [200] [nginx/1.12.2|PHP/5.6.31 MyQEE/3.0(stable)] 

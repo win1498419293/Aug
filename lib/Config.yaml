@@ -1,0 +1,48 @@
+BackFileScan :
+  BackFileScanfile  :  tools/BackFileScan
+  resultFilePath  :  tools/BackFileScan/result/
+CDNcheck : 
+  CDNcheckexe  :  tools/CDNcheck
+  resultFilePath  :  ./tools/CDNcheck/result/
+crawlergo :
+  crawlergoexe  :  tools/crawlergo
+  resultFilePath  :  ./tools/crawlergo/result/
+dirsearch :
+  dirsearchfile  :  tools/dirsearch
+  resultFilePath  :  ./tools/dirsearch/result/
+Finger : 
+  Fingerfile  :  tools\Finger
+  resultFilePath  :  ./tools/Finger/output/
+JSFinderPlus : 
+  JSFinderPlusfile   :   tools/JSFinderPlus
+  resultFilePath   :   ./tools/JSFinderPlus/output/
+katana  :  
+  katanaexe : tools/katana
+  resultFilePath  :  ./tools/katana/
+nuclei  :  
+  nucleiexe : tools/nuclei
+  resultFilePath : ./tools/nuclei/result/
+OneForAll : 
+  OneForAllfile : tools/OneForAll
+  resultFilePath : ./tools/OneForAll/results/
+POC_bomber : 
+  POC_bomberfile : tools/POC_bomber
+  resultFilePath : ./tools/POC_bomber/result/
+TxPortMap : 
+  TxPortMapexe : tools/TxPortMap
+  resultFilePath : ./tools/TxPortMap/result/
+vulmap : 
+  vulmapfile : tools/vulmap
+  resultFilePath : ./tools/vulmap/result/
+wafw00f : 
+  wafw00ffile : tools/wafw00f/wafw00f
+  resultFilePath : ./tools/wafw00f/wafw00f/
+xray : 
+  xrayexe : tools/xray
+  resultFilePath : ./tools/xray/result/
+URLPath : 
+  urlpathexe : tools/URLPath
+  resultFilePath : ./tools/URLPath/
+
+ChromePath :
+  chromePathexe : C:\Program Files\Google\Chrome\Application\chrome.exe

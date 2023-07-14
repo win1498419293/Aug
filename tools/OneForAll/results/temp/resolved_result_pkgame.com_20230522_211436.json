@@ -1,0 +1,17 @@
+{"name":"service.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"service.pkgame.com.","data":"203.107.46.114"}]},"resolver":"4.2.2.5:53"}
+{"name":"scpay.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"scpay.pkgame.com.","data":"59.110.225.76"}]},"resolver":"4.2.2.3:53"}
+{"name":"gz.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"gz.pkgame.com.","data":"47.93.201.8"}]},"resolver":"4.2.2.6:53"}
+{"name":"ulink.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"ulink.pkgame.com.","data":"203.107.46.114"}]},"resolver":"208.67.220.220:53"}
+{"name":"wmini.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"wmini.pkgame.com.","data":"47.94.35.204"}]},"resolver":"1.0.0.2:53"}
+{"name":"www.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"www.pkgame.com.","data":"47.95.245.15"}]},"resolver":"64.6.65.6:53"}
+{"name":"download.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"download.pkgame.com.","data":"47.95.245.15"}]},"resolver":"176.103.130.131:53"}
+{"name":"dx.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"dx.pkgame.com.","data":"101.201.236.58"}]},"resolver":"64.6.64.6:53"}
+{"name":"m.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"m.pkgame.com.","data":"47.95.245.15"}]},"resolver":"176.103.130.131:53"}
+{"name":"bbwy.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"bbwy.pkgame.com.","data":"47.95.245.15"}]},"resolver":"208.67.220.220:53"}
+{"name":"pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"pkgame.com.","data":"47.95.245.15"}]},"resolver":"84.200.69.80:53"}
+{"name":"newpay.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"newpay.pkgame.com.","data":"59.110.225.76"}]},"resolver":"1.0.0.1:53"}
+{"name":"ts.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"ts.pkgame.com.","data":"47.95.245.15"}]},"resolver":"208.67.220.220:53"}
+{"name":"wmini2.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"wmini2.pkgame.com.","data":"123.57.163.97"}]},"resolver":"176.103.130.130:53"}
+{"name":"wmini3.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1799,"type":"A","class":"IN","name":"wmini3.pkgame.com.","data":"47.93.122.14"}]},"resolver":"176.103.130.130:53"}
+{"name":"mail.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":3600,"type":"A","class":"IN","name":"mail.pkgame.com.","data":"218.61.202.202"}]},"resolver":"1.0.0.19:53"}
+{"name":"piqiu.pkgame.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":1800,"type":"A","class":"IN","name":"piqiu.pkgame.com.","data":"203.107.46.114"}]},"resolver":"4.2.2.5:53"}

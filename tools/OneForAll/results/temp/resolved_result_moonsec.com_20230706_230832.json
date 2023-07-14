@@ -1,0 +1,3 @@
+{"name":"www.moonsec.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":900,"type":"A","class":"IN","name":"www.moonsec.com.","data":"8.210.121.117"}]},"resolver":"84.200.69.80:53"}
+{"name":"moonsec.com.","type":"A","class":"IN","status":"NOERROR","data":{"authorities":[{"ttl":250,"type":"SOA","class":"IN","name":"moonsec.com.","data":"ns1.myhostadmin.net. dnsconct.myhostadmin.net. 2015070200 43200 300 1209600 3600"}]},"resolver":"8.8.8.8:53"}
+{"name":"edu.moonsec.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":900,"type":"A","class":"IN","name":"edu.moonsec.com.","data":"8.210.121.117"}]},"resolver":"1.0.0.19:53"}
