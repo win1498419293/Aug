@@ -24,7 +24,9 @@
         
   -u  string
         url，待扫描的url  
-        
+
+![image](https://github.com/win1498419293/Aug/assets/44251830/aed5224f-7f4b-417a-9222-54593af3351c)
+  
 
   
  主要功能是-m 扫描模式：
@@ -34,16 +36,19 @@
      
 1. 调用了下列工具：
     - 子域名扫描：[OneForAll](https://github.com/shmilylty/OneForAll)
-    - 目录扫描：dirsearch[dirsearch](https://github.com/maurosoria/dirsearch)
-    - 备份扫描：BackFileScan
-    - cdn检测：CDNcheck
-    - 爬虫：crawlergo + katana
-    - 指纹识别：Finger
-    - js敏感信息：JSFinderPlus
-    - 漏洞扫描：nuclei + POC_bomber + vulmap
-    - 端口扫描：TxPortMap
+    - 目录扫描：[dirsearch](https://github.com/maurosoria/dirsearch)
+    - 备份扫描：[BackFileScan](https://github.com/VMsec/ihoneyBakFileScan_Modify)
+    - cdn检测：[CDNcheck](https://github.com/Any3ite/cdnCheck)
+    - 爬虫：[crawlergo](https://github.com/Qianlitp/crawlergo) + [katana](https://github.com/projectdiscovery/katana)
+    - 指纹识别：F[Finger](https://github.com/EASY233/Finger)
+    - js敏感信息：[JSFinderPlus](https://github.com/mickeystone/JSFinderPlus)
+    - 漏洞扫描：[nuclei](https://github.com/projectdiscovery/nuclei) + [POC_bomber](https://github.com/tr0uble-mAker/POC-bomber) + [vulmap](https://github.com/zhzyker/vulmap)
+    - 端口扫描：[TxPortMap](https://github.com/4dogs-cn/TXPortMap)
     - 获取url多级目录：[URLPath](https://github.com/r00tSe7en/URLPath)
-    - waf检测：wafw00f
-    -  被动扫描：xray
+    - waf检测：[wafw00f](https://github.com/EnableSecurity/wafw00f)
+    -  被动扫描：[xray](https://github.com/chaitin/xray)
 
-![image](https://github.com/win1498419293/Aug/assets/44251830/aed5224f-7f4b-417a-9222-54593af3351c)
+2.漏洞扫描结果查看 -m rh，启动http服务,访问本机端口:9999查看子域名数据，任务数据，扫描的漏洞数据，html模版是偷[AUTO-EARN](https://github.com/Echocipher/AUTO-EARN)的，自己主要是不会弄，显示好像还有点问题，只能说能用就行
+  ![image](https://github.com/win1498419293/Aug/assets/44251830/9705d787-ef01-4346-9d67-91b7b610e480)
+
+
