@@ -2,10 +2,13 @@
 一个调用各种扫描工具的启动器，可能有各种问题，可以提lssues，能力范围就修，欢迎各位二开
 
 简单使用命令 
-./Aug -u xxx -m xx
+./Aug -u xxx -m xx  
 
-  -f string
-        file，读取文件内容进行扫描
+
+  -f string  
+  
+        file，读取文件内容进行扫描  
+        
   -i string
         ip，扫描端口情况，需配合-p 使用
   -m string
