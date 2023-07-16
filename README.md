@@ -1,28 +1,35 @@
 # Aug
-一个调用各种扫描工具的启动器，可能有各种问题可以提lssues，能力范围就修，代码写的应该比较通俗易懂，欢迎各位根据实际使用需求修改，开源，共享
+一个调用各种扫描工具的启动器，日常工作中需要使用多个脚本要开多个cmd窗口切换麻烦所以有了这个，可能有各种问题可以提lssues，能力范围就修，代码写的应该比较通俗易懂，欢迎各位根据实际使用需求修改，开源，共享
 
 简单使用命令 
 ./Aug -u xxx -m xx  
 
 
   -f  string  
+  
         file，读取文件内容进行扫描  
         
-  -i  string
+  -i  string  
+  
         ip，扫描端口情况，需配合-p 使用  
         
-  -m  string
+  -m  string  
+  
         扫描类型，示例 -m all全流程扫描, -m f 读取文件内容扫描,-m vs漏洞扫描,不加-m 默认为单url扫描,-m ps端口扫描,-m ds目录扫描 -m sf备份文件+目录扫描,-m rh查看任务数据, -m clear 清除扫描的结果文件  
         
-  -p  string
+  -p  string  
+  
         ports，需要扫描的端口或端口范围,如-p 1-100，-p 100 (default "-t1000")  
         
-  -s  save,是否将扫描发现的问题保存到数据库里  
+  -s    
+  save,是否将扫描发现的问题保存到数据库里  
   
-  -t  int
+  -t  int  
+  
         thread，输入线程数量。默认50 (default 50)  
         
-  -u  string
+  -u  string  
+  
         url，待扫描的url  
 
 ![image](https://github.com/win1498419293/Aug/assets/44251830/aed5224f-7f4b-417a-9222-54593af3351c)
