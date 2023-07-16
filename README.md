@@ -24,9 +24,9 @@
 
 * 项目1
  1.调用了下列工具：
-       * 子域名扫描：OneForAll
-       * 目录扫描：dirsearch
-       * 备份扫描：BackFileScan 
+       * 子域名扫描：OneForAll1
+       * 目录扫描：dirsearch2
+       * 备份扫描：BackFileScan3 
        * cdn检测：CDNcheck
        * 爬虫：crawlergo + katana
        * 指纹识别：Finger
