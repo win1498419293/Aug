@@ -33,8 +33,8 @@
      不加-m 默认是js敏感信息收集+目录扫描+爬虫xray+漏洞扫描，适用于需要对站点目录扫描+漏洞扫描  
      
 1. 调用了下列工具：
-    - 子域名扫描：OneForAll
-    - 目录扫描：dirsearch
+    - 子域名扫描：[OneForAll](https://github.com/shmilylty/OneForAll)
+    - 目录扫描：dirsearch[dirsearch](https://github.com/maurosoria/dirsearch)
     - 备份扫描：BackFileScan
     - cdn检测：CDNcheck
     - 爬虫：crawlergo + katana
@@ -42,7 +42,7 @@
     - js敏感信息：JSFinderPlus
     - 漏洞扫描：nuclei + POC_bomber + vulmap
     - 端口扫描：TxPortMap
-    - 获取url多级目录：URLPath
+    - 获取url多级目录：[URLPath](https://github.com/r00tSe7en/URLPath)
     - waf检测：wafw00f
     -  被动扫描：xray
 
