@@ -60,6 +60,7 @@
 
 2.漏洞扫描结果查看 -m rh，启动http服务,访问本机端口:9999查看子域名数据，任务数据，扫描的漏洞数据，html模版是偷[AUTO-EARN](https://github.com/Echocipher/AUTO-EARN)的，自己主要是不会弄，显示好像还有点问题，只能说能用就行
 
+![image](https://github.com/win1498419293/Aug/assets/44251830/e3b6be43-ef3f-4637-8397-c972e45e69e7)
 
 
 
