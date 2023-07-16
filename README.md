@@ -23,9 +23,9 @@
      不加-m 默认是js敏感信息收集+目录扫描+爬虫xray+漏洞扫描，适用于需要对站点目录扫描+漏洞扫描
 
  调用了下列工具：
-      子域名扫描：OneForAll
-      目录扫描：dirsearch
-      备份扫描：BackFileScan 
+      +子域名扫描：OneForAll
+      +目录扫描：dirsearch
+      +备份扫描：BackFileScan 
       cdn检测：CDNcheck
       爬虫：crawlergo + katana
       指纹识别：Finger
@@ -35,3 +35,4 @@
       获取url多级目录：URLPath
       waf检测：wafw00f
       被动扫描：xray
+![image](https://github.com/win1498419293/Aug/assets/44251830/aed5224f-7f4b-417a-9222-54593af3351c)
