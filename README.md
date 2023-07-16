@@ -1,5 +1,5 @@
 # Aug
-一个调用各种扫描工具的启动器，可能有各种问题，可以提lssues，能力范围就修，欢迎各位二开
+一个调用各种扫描工具的启动器，可能有各种问题可以提lssues，能力范围就修，代码写的应该比较通俗易懂，欢迎各位根据实际使用需求修改，开源，共享
 
 简单使用命令 
 ./Aug -u xxx -m xx  
@@ -40,7 +40,7 @@
     - 备份扫描：[BackFileScan](https://github.com/VMsec/ihoneyBakFileScan_Modify)
     - cdn检测：[CDNcheck](https://github.com/Any3ite/cdnCheck)
     - 爬虫：[crawlergo](https://github.com/Qianlitp/crawlergo) + [katana](https://github.com/projectdiscovery/katana)
-    - 指纹识别：F[Finger](https://github.com/EASY233/Finger)
+    - 指纹识别：[Finger](https://github.com/EASY233/Finger)
     - js敏感信息：[JSFinderPlus](https://github.com/mickeystone/JSFinderPlus)
     - 漏洞扫描：[nuclei](https://github.com/projectdiscovery/nuclei) + [POC_bomber](https://github.com/tr0uble-mAker/POC-bomber) + [vulmap](https://github.com/zhzyker/vulmap)
     - 端口扫描：[TxPortMap](https://github.com/4dogs-cn/TXPortMap)
