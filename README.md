@@ -21,7 +21,7 @@
   
         ports，需要扫描的端口或端口范围,如-p 1-100，-p 100 (default "-t1000")  
         
-  -s   bool 
+  -s   bool   
   save,是否将扫描发现的问题保存到数据库里  
   
   -t  int  
