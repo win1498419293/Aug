@@ -13,6 +13,9 @@ dirsearch :
 Finger : 
   Fingerfile  :  tools\Finger
   resultFilePath  :  ./tools/Finger/output/
+FindSomeThing:
+  FindSomeThingfile: tools\Find-SomeThing
+  resultFilePath: ./tools/Find-SomeThing/result/
 JSFinderPlus : 
   JSFinderPlusfile   :   tools/JSFinderPlus
   resultFilePath   :   ./tools/JSFinderPlus/output/

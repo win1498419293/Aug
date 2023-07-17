@@ -272,3 +272,157 @@ UnicodeEncodeError: 'gbk' codec can't encode character '\u2022' in position 194:
     self.wrapped.write(text[start:end])
 UnicodeEncodeError: 'gbk' codec can't encode character '\u2022' in position 194: illegal multibyte sequence
 )
+2023/08/25 11:10:39 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 14, in <module>
+    from core.core import core
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\core.py", line 19, in <module>
+    from core.scan import scan
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\scan.py", line 25, in <module>
+    from payload.Exchange import Exchange
+ModuleNotFoundError: No module named 'payload.Exchange'
+)
+2023/08/25 11:19:51 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 14, in <module>
+    from core.core import core
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\core.py", line 19, in <module>
+    from core.scan import scan
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\scan.py", line 25, in <module>
+    from payload.Exchange import Exchange
+ModuleNotFoundError: No module named 'payload.Exchange'
+)
+2023/08/25 11:19:56 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 14, in <module>
+    from core.core import core
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\core.py", line 19, in <module>
+    from core.scan import scan
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\scan.py", line 25, in <module>
+    from payload.Exchange import Exchange
+ModuleNotFoundError: No module named 'payload.Exchange'
+)
+2023/08/25 11:20:04 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 14, in <module>
+    from core.core import core
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\core.py", line 19, in <module>
+    from core.scan import scan
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\scan.py", line 25, in <module>
+    from payload.Exchange import Exchange
+ModuleNotFoundError: No module named 'payload.Exchange'
+)
+2023/08/25 11:20:27 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 14, in <module>
+    from core.core import core
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\core.py", line 19, in <module>
+    from core.scan import scan
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\scan.py", line 25, in <module>
+    from payload.Exchange import Exchange
+ModuleNotFoundError: No module named 'payload.Exchange'
+)
+2023/08/25 11:20:37 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 14, in <module>
+    from core.core import core
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\core.py", line 19, in <module>
+    from core.scan import scan
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\scan.py", line 25, in <module>
+    from payload.Exchange import Exchange
+ModuleNotFoundError: No module named 'payload.Exchange'
+)
+2023/09/07 10:47:11 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 14, in <module>
+    from core.core import core
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\core.py", line 19, in <module>
+    from core.scan import scan
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\core\scan.py", line 25, in <module>
+    from payload.Exchange import Exchange
+ModuleNotFoundError: No module named 'payload.Exchange'
+)
+2023/09/27 17:20:58 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 7, in <module>
+    print(banner())  # 显示随机banner
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 41, in write
+    self.__convertor.write(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 162, in write
+    self.write_and_convert(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 195, in write_plain_text
+    self.wrapped.write(text[start:end])
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2022' in position 194: illegal multibyte sequence
+)
+2023/09/27 18:27:46 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 7, in <module>
+    print(banner())  # 显示随机banner
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 41, in write
+    self.__convertor.write(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 162, in write
+    self.write_and_convert(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 195, in write_plain_text
+    self.wrapped.write(text[start:end])
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2022' in position 194: illegal multibyte sequence
+)
+2023/09/27 21:26:01 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 7, in <module>
+    print(banner())  # 显示随机banner
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 41, in write
+    self.__convertor.write(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 162, in write
+    self.write_and_convert(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 195, in write_plain_text
+    self.wrapped.write(text[start:end])
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2022' in position 194: illegal multibyte sequence
+)
+2023/10/05 03:06:03 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 7, in <module>
+    print(banner())  # 显示随机banner
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 41, in write
+    self.__convertor.write(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 162, in write
+    self.write_and_convert(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 195, in write_plain_text
+    self.wrapped.write(text[start:end])
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2022' in position 194: illegal multibyte sequence
+)
+2023/10/06 02:54:38 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 7, in <module>
+    print(banner())  # 显示随机banner
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 41, in write
+    self.__convertor.write(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 162, in write
+    self.write_and_convert(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 195, in write_plain_text
+    self.wrapped.write(text[start:end])
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2022' in position 194: illegal multibyte sequence
+)
+2023/10/06 03:35:40 vulmapscan cmd.Run() failed with exit status 1
+%!(EXTRA string=Traceback (most recent call last):
+  File "vulmap.py", line 7, in <module>
+    print(banner())  # 显示随机banner
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 41, in write
+    self.__convertor.write(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 162, in write
+    self.write_and_convert(text)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 187, in write_and_convert
+    self.write_plain_text(text, cursor, start)
+  File "D:\JDK\GDK\gopath\Aug\tools\vulmap\thirdparty\colorama\ansitowin32.py", line 195, in write_plain_text
+    self.wrapped.write(text[start:end])
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2022' in position 194: illegal multibyte sequence
+)

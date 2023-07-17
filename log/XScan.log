@@ -867,3 +867,20 @@
 'channelId' ²»ÊÇÄÚ²¿»òÍâ²¿ÃüÁî£¬Ò²²»ÊÇ¿ÉÔËÐÐµÄ³ÌÐò
 »òÅú´¦ÀíÎÄ¼þ¡£
 )
+2023/10/02 15:21:02 
+2023/10/02 15:30:32 katanascan cmd.Run() failed with exit status 255
+%!(EXTRA string=
+   __        __                
+  / /_____ _/ /____ ____  ___ _
+ /  '_/ _  / __/ _  / _ \/ _  /
+/_/\_\\_,_/\__/\_,_/_//_/\_,_/							 
+
+		projectdiscovery.io
+
+[[34mINF[0m] Current katana version v1.0.1 ([91moutdated[0m)
+[[34mINF[0m] Started standard crawling for => http://8.210.121.117:8888/index.php?a=Admin
+'c' ²»ÊÇÄÚ²¿»òÍâ²¿ÃüÁî£¬Ò²²»ÊÇ¿ÉÔËÐÐµÄ³ÌÐò
+»òÅú´¦ÀíÎÄ¼þ¡£
+'m' ²»ÊÇÄÚ²¿»òÍâ²¿ÃüÁî£¬Ò²²»ÊÇ¿ÉÔËÐÐµÄ³ÌÐò
+»òÅú´¦ÀíÎÄ¼þ¡£
+)

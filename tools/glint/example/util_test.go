@@ -273,7 +273,7 @@ func Test_matchtohref(t *testing.T) {
 	re := regexp.MustCompile(pattern)
 
 	// 待匹配的字符串
-	str := `<a href="https://example.com/index.html?8634&n974065=v934137">Link</a>`
+	str := `<a href="https://example.com/home.html?8634&n974065=v934137">Link</a>`
 
 	// 匹配字符串
 	match := re.MatchString(str)

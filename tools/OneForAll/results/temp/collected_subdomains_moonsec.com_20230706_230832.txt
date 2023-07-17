@@ -1,7 +1,0 @@
-ss.moonsec.com
-moonsec.com
-so.moonsec.com
-edu.moonsec.com
-www.moonsec.com
-sec.moonsec.com
-blog.moonsec.com

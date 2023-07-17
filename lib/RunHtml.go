@@ -96,7 +96,7 @@ func getUsersHandler(c *gin.Context) {
 	}
 
 	// 返回分页结果
-	c.HTML(http.StatusOK, "index.html", gin.H{
+	c.HTML(http.StatusOK, "home.html", gin.H{
 		"page":       pageInt,
 		"pageSize":   pageSizeInt,
 		"data":       valueMap,
@@ -173,4 +173,3 @@ func Paginator(page, prepage int, nums int64) map[string]interface{} {
 	paginatorMap["currpage"] = page
 	return paginatorMap
 }
-

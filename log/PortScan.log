@@ -1788,3 +1788,5 @@ UnicodeEncodeError: 'gbk' codec can't encode character '\u2022' in position 194:
 2023/07/06 23:09:06 运行结束
 2023/07/06 23:09:31 运行结束
 2023/07/06 23:09:38 运行结束
+2023/10/05 02:24:15 漏洞扫描完成
+2023/10/07 14:50:33 cmd.Run() failed with exit status 1

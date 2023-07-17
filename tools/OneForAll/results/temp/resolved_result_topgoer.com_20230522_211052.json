@@ -1,4 +1,0 @@
-{"name":"m5.topgoer.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":600,"type":"A","class":"IN","name":"m5.topgoer.com.","data":"122.114.252.221"}]},"resolver":"4.2.2.5:53"}
-{"name":"m4.topgoer.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":600,"type":"A","class":"IN","name":"m4.topgoer.com.","data":"122.114.252.221"}]},"resolver":"1.0.0.3:53"}
-{"name":"m3.topgoer.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":600,"type":"A","class":"IN","name":"m3.topgoer.com.","data":"122.114.252.221"}]},"resolver":"9.9.9.10:53"}
-{"name":"m0.topgoer.com.","type":"A","class":"IN","status":"NOERROR","data":{"answers":[{"ttl":600,"type":"A","class":"IN","name":"m0.topgoer.com.","data":"122.114.252.221"}]},"resolver":"8.20.247.20:53"}

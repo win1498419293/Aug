@@ -14,6 +14,7 @@ type Charset string
 type SubdomainNameProperties struct {
 	//Id        string
 	Url       string
+	Src       string
 	Subdomain string
 	Ip        string
 	Port      string

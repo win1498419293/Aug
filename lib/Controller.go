@@ -1,6 +1,8 @@
 package lib
 
 import (
+	"Aug/lib/Weak_Pass_Burst"
+	//"Aug/web"
 	"flag"
 	"fmt"
 	"github.com/fatih/color"
@@ -13,6 +15,7 @@ import (
 )
 
 type VulnProperties struct {
+	Src        string
 	CreateTime string
 	Url        string
 	Payload    string
@@ -28,6 +31,7 @@ var (
 	ports  string
 	thread int
 	flags  bool //是否将发现的漏洞信息插入到数据库
+	src    string
 )
 
 func banner() {
@@ -75,7 +79,7 @@ func banner() {
 
 }
 
-func AllScan(target, url string, thread int) {
+func AllScan(target, url, src string, thread int) {
 	flags = true
 	txt := ""
 	domain := ""
@@ -95,7 +99,7 @@ func AllScan(target, url string, thread int) {
 
 			//收集子域名
 			Collect_Subdomain_un(domain)
-			fmt.Println("收集子域名")
+			fmt.Println("正在收集子域名")
 
 			//创建数据表
 			Connentdb()
@@ -107,6 +111,7 @@ func AllScan(target, url string, thread int) {
 			for i := 2; i < len(csvlens)-1; i++ {
 				properties := SubdomainNameProperties{
 					//Id:        csvlens[i][0],
+					Src:       src,
 					Url:       csvlens[i][4],
 					Subdomain: csvlens[i][5],
 					Ip:        csvlens[i][8],
@@ -119,7 +124,7 @@ func AllScan(target, url string, thread int) {
 				fmt.Println("插入子域名表")
 			}
 		}
-		scan(thread)
+		Scan(src, url, thread)
 	} else {
 		if strings.Contains(url, "http") {
 			domain, _ = Urlchange(url)
@@ -130,17 +135,19 @@ func AllScan(target, url string, thread int) {
 		//fmt.Println(domain)
 
 		//收集子域名
-		fmt.Println("收集子域名")
+		fmt.Println("正在收集子域名")
 		Collect_Subdomain_un(domain)
 
 		Connentdb()
 		SubdomainResultCsvPath := OneForAllresultFilePath + domain + ".csv"
-		fmt.Println(SubdomainResultCsvPath)
+		//fmt.Println(SubdomainResultCsvPath)
 
 		csvlens := ReadSubdomainResult(SubdomainResultCsvPath)
+		fmt.Println("插入子域名表")
 		for i := 2; i < len(csvlens)-1; i++ {
 			properties := SubdomainNameProperties{
 				//Id:        csvlens[i][0],
+				Src:       src,
 				Url:       csvlens[i][4],
 				Subdomain: csvlens[i][5],
 				Ip:        csvlens[i][8],
@@ -148,71 +155,90 @@ func AllScan(target, url string, thread int) {
 				Status:    csvlens[i][12],
 				Title:     csvlens[i][14],
 			}
-			fmt.Println("插入数据库")
+
 			properties.InsertTables()
 		}
 	}
-	scan(thread)
+	Scan(src, url, thread)
 }
 
-func scan(thread int) {
+func Scan(src, url string, thread int) {
 	Connentdb()
-	//cdn,waf检测
 
-	checkcdn, checkwaf := SelectSubdmaindb()
-	fmt.Println("waf检测")
+	getsubnum := SelectAllSubdmaindb("", "", src)
+	fmt.Println("本次共收集: ", len(getsubnum)+1, "个子域名")
+	//cdn,waf检测
+	checkcdn, checkwaf := SelectSubdmaindb(src, url)
+
+	fmt.Println("开始waf检测")
 	for id, flag := range checkwaf {
 		updateSubdomain("Waf", flag, id)
-		fmt.Println("cdn", flag, id)
 	}
-	fmt.Println("cdn检测")
+	fmt.Println("开始cdn检测")
 	for id, flag := range checkcdn {
 		updateSubdomain("Cdn", flag, id)
-		fmt.Println("waf", flag, id)
+
 	}
 
 	//端口扫描结果创建Task表
-	TableResultMap := SelectAllSubdmaindb("Cdn", "False")
-	fmt.Println("端口扫描")
+	TableResultMap := SelectAllSubdmaindb("Cdn", "False", src, url)
+	fmt.Println("开始端口扫描,本次共扫描", len(TableResultMap)+1, "个ip")
+	lastip := ""
 	for _, value := range TableResultMap {
-		fmt.Println(value["ip"])
-		IpScan(value["ip"], ports, flags)
+		if value["ip"] != lastip {
+			lastip = value["ip"]
+			//跳过本地地址
+			if value["ip"] != "127.0.0.1" {
+				IpScan(flags, value["ip"], ports, src, value["url"])
+			}
+
+		}
 	}
 
 	//查询Task表进行指纹识别并获取cms字段写入Task表
-	TaskResultMap := SelectAllTaskdb("Service", "http")
+	TaskResultMap := SelectAllTaskdb("Service", "http", src, url)
+	fmt.Println("本次共插入: ", len(TaskResultMap)+1, "个url至Task表")
+	fmt.Println("开始漏洞扫描,本次共扫描", len(TaskResultMap)+1, "个url")
+	num := len(TaskResultMap)
+	sum := 1
 	for _, value := range TaskResultMap {
+		fmt.Println("正在扫描第", sum, "个url，还有", num, "需要url扫描")
 		color.Cyan("开始指纹识别")
 		FingerScan(value["url"])
 		color.Cyan("指纹识别结束")
 		color.Yellow("开始vulmap扫描")
-		vulmapscan(value["url"], thread, flags)
+		Vulmapscan(value["url"], src, thread, flags)
 		color.Yellow("vulmap扫描结束")
 		color.Red("开始nuclei扫描")
-		nucleiscan(value["url"], flags)
+		Nucleiscan(value["url"], src, flags)
 		color.Red("nuclei扫描结束")
 		color.White("开始pocbomber扫描")
-		pocbomberscan(value["url"], thread, flags)
+		Pocbomberscan(value["url"], src, thread, flags)
 		color.White("pocbomber扫描结束")
+		color.Green("开始Find-SomeThing扫描")
+		FindSomeThingscan(value["url"], src, flags)
+		color.Green("Find-SomeThing扫描结束")
+		sum += 1
+		num -= 1
 	}
 
 	//获取js敏感信息进行爬虫被动扫描漏洞
 	xrayreport := ""
-	fmt.Println("获取js敏感信息")
+	fmt.Println("开始获取js敏感信息")
 	for _, value := range TaskResultMap {
-		JsSensitiveData := finderjs(value["url"])
+		JsSensitiveData := Finderjs(value["url"])
 		for i := 0; i < len(JsSensitiveData); i++ {
-			xrayresult := startCrawlerGo(JsSensitiveData[i], thread)
+			xrayresult := StartCrawlerGo(JsSensitiveData[i], thread)
 			if xrayresult != "" {
 				xrayreport = xrayresult
 			}
-			katanascan(JsSensitiveData[i])
+			Katanascan(JsSensitiveData[i])
 		}
 	}
 	//判断扫描报告是否生成
 	resultfile, err := os.Stat(xrayreport)
 	if err == nil && resultfile.Size() > 0 {
-		fmt.Println("读取扫描报告")
+		fmt.Println("开始读取扫描报告")
 		fmt.Println(xrayreport)
 
 		//获取扫描的漏洞信息保存到漏洞表
@@ -220,6 +246,7 @@ func scan(thread int) {
 		for _, vaule := range ghr {
 			if vaule["addr"] != "" {
 				properties := VulnProperties{
+					Src:        src,
 					CreateTime: vaule["createTi"],
 					Url:        vaule["target"],
 					Payload:    vaule["Paylo"],
@@ -249,10 +276,10 @@ func scanmode() {
 			url := txts[i]
 			c.Printf("%s开始扫描:", url)
 			fmt.Println()
-			JsSensitiveData := finderjs(url)
-			katanascan(url)
+			JsSensitiveData := Finderjs(url)
+			Katanascan(url)
 			for i := 0; i < len(JsSensitiveData); i++ {
-				startCrawlerGo(JsSensitiveData[i], thread)
+				StartCrawlerGo(JsSensitiveData[i], thread)
 			}
 			c.Printf("%s扫描完成", url)
 
@@ -264,12 +291,12 @@ func scanmode() {
 		c.Printf("%s开始扫描:", urls)
 		fmt.Println()
 		if file == "" {
-			AllScan("", urls, thread)
+			AllScan("", urls, src, thread)
 		} else {
 			txts := Readfile(file)
 			// 读取全部返回的urls，判断没有协议就加上协议
 			for i := 0; i < len(txts)-1; i++ {
-				AllScan(file, "", thread)
+				AllScan(file, "", src, thread)
 			}
 		}
 		c.Printf("%s扫描完成", urls)
@@ -279,7 +306,7 @@ func scanmode() {
 		start := time.Now() // 获取当前时间
 		c.Printf("%s开始端口扫描%s: ", ip, ports)
 		fmt.Println()
-		IpScan(ip, ports, flags)
+		IpScan(flags, ip, ports, src)
 		c.Printf("%s端口扫描完成 ", ip)
 		elapsed := time.Since(start)
 		color.Cyan("执行完成耗时：%s", elapsed)
@@ -292,14 +319,17 @@ func scanmode() {
 			FingerScan(urls)
 			color.Cyan("指纹识别结束")
 			color.Yellow("开始vulmap扫描")
-			vulmapscan(urls, thread, flags)
+			Vulmapscan(urls, src, thread, flags)
 			color.Yellow("vulmap扫描结束")
 			color.Red("开始nuclei扫描")
-			nucleiscan(urls, flags)
+			Nucleiscan(urls, src, flags)
 			color.Red("nuclei扫描结束")
 			color.White("开始pocbomber扫描")
-			pocbomberscan(urls, thread, flags)
+			Pocbomberscan(urls, src, thread, flags)
 			color.White("pocbomber扫描结束")
+			color.Green("开始Find-SomeThing扫描")
+			FindSomeThingscan(urls, src, flags)
+			color.Green("Find-SomeThing扫描结束")
 		} else {
 			txts := Readfile(file)
 			// 读取全部返回的urls，判断没有协议就加上协议
@@ -308,14 +338,17 @@ func scanmode() {
 				FingerScan(txts[i])
 				color.Cyan("%s:指纹识别结束", txts[i])
 				color.Yellow("%s:开始vulmap扫描", txts[i])
-				vulmapscan(txts[i], thread, flags)
+				Vulmapscan(txts[i], src, thread, flags)
 				color.Yellow("%s:vulmap扫描结束", txts[i])
 				color.Red("%s:开始nuclei扫描", txts[i])
-				nucleiscan(txts[i], flags)
+				Nucleiscan(txts[i], src, flags)
 				color.Red("%s:nuclei扫描结束", txts[i])
 				color.White("%s:开始pocbomber扫描", txts[i])
-				pocbomberscan(txts[i], thread, flags)
+				Pocbomberscan(txts[i], src, thread, flags)
 				color.White("%s:pocbomber扫描结束", txts[i])
+				color.Green("开始Find-SomeThing扫描")
+				FindSomeThingscan(txts[i], src, flags)
+				color.Green("Find-SomeThing扫描结束")
 			}
 		}
 
@@ -327,14 +360,14 @@ func scanmode() {
 		c.Printf("%s开始备份文件扫描: ", urls)
 		fmt.Println()
 		if file == "" {
-			backfilescan(urls, thread)
-			dirsearchscan(urls, thread)
+			Backfilescan(urls, thread)
+			Dirsearchscan(urls, thread)
 		} else {
 			txts := Readfile(file)
 			// 读取全部返回的urls，判断没有协议就加上协议
 			for i := 0; i < len(txts)-1; i++ {
-				backfilescan(txts[i], thread)
-				dirsearchscan(txts[i], thread)
+				Backfilescan(txts[i], thread)
+				Dirsearchscan(txts[i], thread)
 			}
 		}
 
@@ -346,12 +379,12 @@ func scanmode() {
 		c.Printf("%s开始目录扫描: ", urls)
 		fmt.Println()
 		if file == "" {
-			dirsearchscan(urls, thread)
+			Dirsearchscan(urls, thread)
 		} else {
 			txts := Readfile(file)
 			for i := 0; i < len(txts); i++ {
 				fmt.Println("开始扫描:", txts[i])
-				dirsearchscan(txts[i], thread)
+				Dirsearchscan(txts[i], thread)
 			}
 		}
 		c.Printf("%s目录扫描完成: ", urls)
@@ -362,10 +395,10 @@ func scanmode() {
 		c.Printf("%s开始单url扫描: ", urls)
 		fmt.Println()
 		if file == "" {
-			JsSensitiveData := finderjs(urls)
-			katanascan(urls)
+			JsSensitiveData := Finderjs(urls)
+			Katanascan(urls)
 			for i := 0; i < len(JsSensitiveData); i++ {
-				xrayresult := startCrawlerGo(JsSensitiveData[i], thread)
+				xrayresult := StartCrawlerGo(JsSensitiveData[i], thread)
 				resultfile, err := os.Stat(xrayresult)
 				if xrayresult != "" && err == nil && resultfile.Size() > 0 {
 					ghr := GetXrayHtmlResult(xrayresult)
@@ -377,28 +410,31 @@ func scanmode() {
 				}
 			}
 			color.Magenta("开始目录扫描")
-			dirsearchscan(urls, thread)
+			Dirsearchscan(urls, thread)
 			color.Magenta("目录扫描结束")
 			color.Cyan("开始指纹识别")
 			FingerScan(urls)
 			color.Cyan("指纹识别结束")
 			color.Yellow("开始vulmap扫描")
-			vulmapscan(urls, thread, flags)
+			Vulmapscan(urls, src, thread, flags)
 			color.Yellow("vulmap扫描结束")
 			color.Red("开始nuclei扫描")
-			nucleiscan(urls, flags)
+			Nucleiscan(urls, src, flags)
 			color.Red("nuclei扫描结束")
 			color.White("开始pocbomber扫描")
-			pocbomberscan(urls, thread, flags)
+			Pocbomberscan(urls, src, thread, flags)
 			color.White("pocbomber扫描结束")
+			color.Green("开始Find-SomeThing扫描")
+			FindSomeThingscan(urls, src, flags)
+			color.Green("Find-SomeThing扫描结束")
 		} else {
 			txts := Readfile(file)
 			// 读取全部返回的urls，判断没有协议就加上协议
 			for i := 0; i < len(txts)-1; i++ {
-				JsSensitiveData := finderjs(txts[i])
-				katanascan(txts[i])
+				JsSensitiveData := Finderjs(txts[i])
+				Katanascan(txts[i])
 				for i := 0; i < len(JsSensitiveData); i++ {
-					startCrawlerGo(JsSensitiveData[i], thread)
+					StartCrawlerGo(JsSensitiveData[i], thread)
 				}
 			}
 		}
@@ -409,6 +445,20 @@ func scanmode() {
 		c.Printf("请访问本机9999/端口查看漏洞数据: ")
 		fmt.Println()
 		runhtml()
+	case "cs":
+		start := time.Now() // 获取当前时间
+		c.Printf("%s开始c段扫描: ", ip)
+		cscan(ip)
+		c.Printf("%s扫描完成: ", ip)
+		Weak_Pass_Burst.SshScan("sshscan", ip)
+		Weak_Pass_Burst.SmbScan("smbscan", ip)
+		Weak_Pass_Burst.MysqlScan("mysqlscan", ip)
+		Weak_Pass_Burst.MssqlScan("mssqlscan", ip)
+		Weak_Pass_Burst.FtpScan("ftpscan", ip)
+		Weak_Pass_Burst.MongodbScan("mongodbscan", ip)
+		Weak_Pass_Burst.RedisScan("redisscan", ip)
+		elapsed := time.Since(start)
+		color.Cyan("执行完成耗时：%s", elapsed)
 	case "clear":
 		SelectPath(".json")
 		SelectPath(".html")
@@ -421,8 +471,11 @@ func scanmode() {
 	}
 }
 func Startmain() {
-	scanmode()
-	//pocbomberscan("http://36.155.98.9:27071/privatemanage/", 10, false)
+	//scanmode()
+	//lib.MssqlScan("MSSQLSCAN", "1.116.24.217")
+	//cscan("104.21.43.32")
+	Weak_Pass_Burst.SshScan("sshscan", "101.43.49.191")
+	//web.Webmain()
 
 }
 
@@ -439,6 +492,8 @@ func init() {
 	flag.StringVar(&ip, "i", "", "ip，扫描端口情况，需配合-p 使用")
 	//端口范围
 	flag.StringVar(&ports, "p", "-t1000", "ports，需要扫描的端口或端口范围,如-p 1-100，-p 100")
+	//端口范围
+	flag.StringVar(&src, "src", "", "src，厂商名称 -src 小米")
 	//模式选择：默认单站点扫描  all多全流程扫描 vul仅漏洞扫描
 	flag.StringVar(&mode, "m", "", "扫描类型，示例 -m all全流程扫描，-m f 读取文件内容扫描,-m vs漏洞扫描,不加-m 默认为单url扫描,-m ps端口扫描，-m ds目录扫描 -m sf备份文件+目录扫描,-m rh查看任务数据, -m clear 清除扫描的结果文件")
 }
@@ -467,6 +522,8 @@ func SelectPath(ftype string) {
 
 		pocbomberfile := Readyaml("POC_bomber.resultFilePath")
 		removetmp(pocbomberfile, ftype)
+		FindSomeThingfile := Readyaml("FindSomeThing.resultFilePath")
+		removetmp(FindSomeThingfile, ftype)
 	case ftype == ".csv":
 		OneForAllresultFilePath := Readyaml("OneForAll.resultFilePath")
 		fmt.Println(OneForAllresultFilePath)

@@ -1,0 +1,40 @@
+{
+  "req_list": [
+    {
+      "url": "http://8.210.121.117:8888/index.php?a=Admin\u0026c=Login\u0026m=login",
+      "method": "GET",
+      "headers": {
+        "Spider-Name": "crawlergo",
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.0 Safari/537.36"
+      },
+      "data": "",
+      "source": "Target"
+    }
+  ],
+  "all_req_list": [
+    {
+      "url": "http://8.210.121.117:8888/index.php?a=Admin\u0026c=Login\u0026m=login",
+      "method": "GET",
+      "headers": {
+        "Spider-Name": "crawlergo",
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.0 Safari/537.36"
+      },
+      "data": "",
+      "source": "Target"
+    },
+    {
+      "url": "https://8.210.121.117:8888/index.php?a=Admin\u0026c=Login\u0026m=login",
+      "method": "GET",
+      "headers": {
+        "Spider-Name": "crawlergo",
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.0 Safari/537.36"
+      },
+      "data": "",
+      "source": "Target"
+    }
+  ],
+  "all_domain_list": [
+    "8.210.121.117"
+  ],
+  "sub_domain_list": null
+}a":"","source":"Navigation"}],"all_req_list":[{"url":"http://8.210.121.117:8888/admin/druid/index.html","method":"GET","headers":{"Spider-Name":"crawlergo","User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.0 Safari/537.36"},"data":"","source":"Target"},{"url":"https://8.210.121.117:8888/admin/druid/index.html","method":"GET","headers":{"Spider-Name":"crawlergo","User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.0 Safari/537.36"},"data":"","source":"Target"},{"url":"http://8.210.121.117:8888/admin/druid/index.html","method":"GET","headers":{"Spider-Name":"crawlergo","User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.0 Safari/537.36"},"data":"","source":"Navigation"},{"url":"http://8.210.121.117:8888/login","method":"GET","headers":{"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7","Spider-Name":"crawlergo","Upgrade-Insecure-Requests":"1","User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.0 Safari/537.36"},"data":"","source":"Navigation"}],"all_domain_list":["8.210.121.117"],"sub_domain_list":null}

@@ -71,7 +71,7 @@ type Target struct {
 	Params []Params `json:"params"`
 }
 
-func finderjs(url string) []string {
+func Finderjs(url string) []string {
 
 	regstr := `\d+\.\d+\.\d+\.\d+`   //两个及两个以上空格的正则表达式
 	reg, _ := regexp.Compile(regstr) //编译正则表达式
@@ -89,7 +89,7 @@ func finderjs(url string) []string {
 	flag := chechstart()
 	if flag {
 		//读取存在的xray漏洞报告
-		startxray(dom)
+		Startxray(dom)
 	}
 
 	jsfinderresultFilePath := Readyaml("JSFinderPlus.resultFilePath")
@@ -164,7 +164,7 @@ func removeDuplicateElement(languages []string) []string {
 }
 
 // 调用CrawlerGo对传入的站点进行爬取url爬取
-func startCrawlerGo(url string, thread int) string {
+func StartCrawlerGo(url string, thread int) string {
 	crawlergoresultFilePath := Readyaml("crawlergo.resultFilePath")
 	crawlergoexe := Readyaml("crawlergo.crawlergoexe")
 	resultfile, err := os.Stat(crawlergoresultFilePath)
@@ -187,7 +187,7 @@ func startCrawlerGo(url string, thread int) string {
 	flag := chechstart()
 	if flag {
 		//读取存在的xray漏洞报告
-		xrayreport = startxray(dom)
+		xrayreport = Startxray(dom)
 	}
 
 	now := time.Now()
@@ -202,10 +202,7 @@ func startCrawlerGo(url string, thread int) string {
 		log.Fatalf("CrawlerGo cmd.Run() failed with %s\n", err)
 	}
 
-	flags := cmd.Wait()
-	if flags == nil {
-		fmt.Println("运行结束")
-	}
+	cmd.Wait()
 
 	resultFilePath := crawlergoresultFilePath + outreport
 	resultFile, err := os.Stat(resultFilePath)
@@ -328,7 +325,7 @@ func chechstart() bool {
 	return flag
 }
 
-func startxray(host string) string {
+func Startxray(host string) string {
 	XScanlog, err := os.OpenFile("log/XScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	regstr := `\d+\.\d+\.\d+\.\d+`   //两个及两个以上空格的正则表达式
 	reg, _ := regexp.Compile(regstr) //编译正则表达式
@@ -368,7 +365,7 @@ func startxray(host string) string {
 	return xrayreport
 }
 
-func nucleiscan(url string, flag bool) {
+func Nucleiscan(url, src string, flag bool) {
 	c := color.New()
 	c.Add(color.FgRed, color.Bold)
 	XScanlog, err := os.OpenFile("log/XScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
@@ -404,7 +401,7 @@ func nucleiscan(url string, flag bool) {
 	cmd.Stderr = &stderr
 	err = cmd.Run()
 	if err != nil {
-		log.Fatalf("nucleiscan cmd.Run() failed with %s\n", err, stderr.String())
+		log.Fatalf("Nucleiscan cmd.Run() failed with %s\n", err, stderr.String())
 	}
 	flags := cmd.Wait()
 	if flags == nil {
@@ -420,6 +417,7 @@ func nucleiscan(url string, flag bool) {
 				fmt.Println()
 				if flag {
 					properties := VulnProperties{
+						Src:        src,
 						CreateTime: vaule["timestamp"],
 						Url:        vaule["url"],
 						Payload:    vaule["curlcommand"],
@@ -509,7 +507,7 @@ func GetNucleiResult(path string) map[int]map[string]string {
 	return nucleitxt
 }
 
-func vulmapscan(url string, thread int, flag bool) {
+func Vulmapscan(url, src string, thread int, flag bool) {
 	c := color.New()
 	c.Add(color.FgRed, color.Bold)
 	XScanlog, err := os.OpenFile("log/XScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
@@ -548,7 +546,7 @@ func vulmapscan(url string, thread int, flag bool) {
 	cmd.Stderr = &stderr
 	err = cmd.Run()
 	if err != nil {
-		log.Fatalf("vulmapscan cmd.Run() failed with %s\n", err, stderr.String())
+		log.Fatalf("Vulmapscan cmd.Run() failed with %s\n", err, stderr.String())
 	}
 	flags := cmd.Wait()
 	if flags == nil {
@@ -567,6 +565,7 @@ func vulmapscan(url string, thread int, flag bool) {
 			c.Println("Url:", vaule["Url"], "  Plugin:", vaule["Plugin"], " Description:", vaule["Description"])
 			if flag {
 				properties := VulnProperties{
+					Src:        src,
 					CreateTime: vaule["CreateTime"],
 					Url:        vaule["Url"],
 					Payload:    vaule["Payload"],
@@ -725,7 +724,7 @@ func GetVulmapJsonResult(path string) map[int]map[string]string {
 }
 
 // flag 用来判断是否需要将扫描到的漏洞插入到数据库
-func pocbomberscan(url string, thread int, flag bool) {
+func Pocbomberscan(url, src string, thread int, flag bool) {
 
 	c := color.New()
 	c.Add(color.FgRed, color.Bold)
@@ -764,7 +763,7 @@ func pocbomberscan(url string, thread int, flag bool) {
 	cmd.Stderr = &stderr
 	err = cmd.Run()
 	if err != nil {
-		log.Fatalf("pocbomberscan cmd.Run() failed with %s\n", err, stderr.String())
+		log.Fatalf("Pocbomberscan cmd.Run() failed with %s\n", err, stderr.String())
 	}
 	flags := cmd.Wait()
 	if flags == nil {
@@ -783,6 +782,7 @@ func pocbomberscan(url string, thread int, flag bool) {
 			c.Println("Url:", vaule["Url"], "VName: ", vaule["Name"], "VAbout: ", vaule["About"])
 			if flag {
 				properties := VulnProperties{
+					Src:        src,
 					CreateTime: currenttime,
 					Url:        vaule["Url"],
 					Payload:    vaule["Payload"],
@@ -822,7 +822,7 @@ func GetPocbomberResult(path string) map[int]map[string]string {
 	return pocbomtxt
 }
 
-func backfilescan(url string, thread int) {
+func Backfilescan(url string, thread int) {
 	XScanlog, err := os.OpenFile("log/XScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	BackFileScanresultFilePath := Readyaml("BackFileScan.resultFilePath")
 	BackFileScanfile := Readyaml("BackFileScan.BackFileScanfile")
@@ -842,7 +842,7 @@ func backfilescan(url string, thread int) {
 	cmd.Stderr = &stderr
 	err = cmd.Run()
 	if err != nil {
-		log.Fatalf("backfilescan cmd.Run() failed with %s\n", err, stderr.String())
+		log.Fatalf("Backfilescan cmd.Run() failed with %s\n", err, stderr.String())
 	}
 	flags := cmd.Wait()
 	if flags == nil {
@@ -861,7 +861,7 @@ func backfilescan(url string, thread int) {
 	log.SetOutput(XScanlog)
 }
 
-func dirsearchscan(url string, thread int) {
+func Dirsearchscan(url string, thread int) {
 	XScanlog, err := os.OpenFile("log/XScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	dirsearchresultFilePath := Readyaml("dirsearch.resultFilePath")
 	dirsearchfile := Readyaml("dirsearch.dirsearchfile")
@@ -886,7 +886,7 @@ func dirsearchscan(url string, thread int) {
 	cmd.Stderr = &stderr
 	err = cmd.Run()
 	if err != nil {
-		log.Fatalf("dirsearchscan cmd.Run() failed with %s\n", err, stderr.String())
+		log.Fatalf("Dirsearchscan cmd.Run() failed with %s\n", err, stderr.String())
 	}
 	flags := cmd.Wait()
 	if flags == nil {
@@ -915,7 +915,68 @@ func dirsearchscan(url string, thread int) {
 	log.SetOutput(XScanlog)
 }
 
-func katanascan(url string) {
+func FindSomeThingscan(url, src string, flag bool) {
+	XScanlog, err := os.OpenFile("log/XScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+
+	FindSomeThingresultFilePath := Readyaml("FindSomeThing.resultFilePath")
+
+	FindSomeThingfile := Readyaml("FindSomeThing.FindSomeThingfile")
+	resultfile, err := os.Stat(FindSomeThingresultFilePath)
+
+	if !(err == nil && resultfile.Size() > 0) {
+		os.Mkdir(FindSomeThingresultFilePath, os.ModePerm)
+	}
+	//只有域名的话，添加协议
+	if !strings.Contains(url, "http") {
+		url = "http://" + url
+	}
+	com := "python scan.py -u " + url
+	cmd := exec.Command("cmd", "/c", com)
+	cmd.Dir = FindSomeThingfile
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
+	err = cmd.Run()
+	if err != nil {
+		log.Fatalf("FindSomeThingscan cmd.Run() failed with %s\n", err, stderr.String())
+	}
+	flags := cmd.Wait()
+	if flags == nil {
+		fmt.Println("运行结束")
+	}
+
+	resultFilePath := FindSomeThingresultFilePath + "/report.txt"
+	resultFile, err := os.Stat(resultFilePath)
+	now := time.Now()
+	currenttime := now.Format("2006-01-02 02:23:23")
+	if err == nil && resultFile.Size() > 0 {
+		//获取扫描结果
+		item := GetKatanaResult(resultFilePath)
+		for _, value := range item {
+
+			re := strings.Split(value, " ")
+			if re[1] == "[+][SUCCESS]" {
+				color.Red(value)
+				if flag {
+					properties := VulnProperties{
+						Src:        src,
+						CreateTime: currenttime,
+						Url:        url,
+						Payload:    re[3],
+						Vname:      re[2],
+						Vabout:     "",
+					}
+					properties.InsertVulTables()
+				}
+			}
+
+		}
+	}
+	log.SetOutput(XScanlog)
+}
+
+func Katanascan(url string) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Println("cdncheck出现错误:", err)
@@ -942,7 +1003,7 @@ func katanascan(url string) {
 	flag := chechstart()
 	if flag {
 		//读取存在的xray漏洞报告
-		startxray(dom)
+		Startxray(dom)
 	}
 	now := time.Now()
 	currentData := now.Format("2006-01-02")
@@ -956,13 +1017,10 @@ func katanascan(url string) {
 	cmd.Stderr = &stderr
 	err = cmd.Run()
 	if err != nil {
-		log.Fatalf("katanascan cmd.Run() failed with %s\n", err, stderr.String())
+		log.Fatalf("Katanascan cmd.Run() failed with %s\n", err, stderr.String())
 	}
 
-	flags := cmd.Wait()
-	if flags == nil {
-		fmt.Println("运行结束")
-	}
+	cmd.Wait()
 	resultFilePath := fmt.Sprintf(katanaresultFilePath+"%s.txt", currentData+dom)
 	resultFile, err := os.Stat(resultFilePath)
 	if err == nil && resultFile.Size() > 0 {
