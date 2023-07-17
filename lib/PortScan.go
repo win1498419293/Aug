@@ -100,7 +100,7 @@ func Cdncheck(ip string) (bool, string) {
 	}
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 
 	// 使用 Stat 函数获取文件信息
@@ -143,7 +143,7 @@ func Wafcheck(url string) (bool, string) {
 
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 	// 使用 Stat 函数获取文件信息
 	data, err := ioutil.ReadFile(wafw00ffresultFilePath + "result.txt")
@@ -231,7 +231,7 @@ func IpScan(ip, ports string, flag bool) {
 
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 
 	TxPortMap := GetPortResult(TxPortMapresultFilePath + ip + currentdata + ".json")

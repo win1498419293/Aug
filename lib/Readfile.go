@@ -40,7 +40,7 @@ func Readfile(path string) []string {
 	//enc = mahonia.NewDecoder("gbk")
 	txt := []string{}
 	//创建日志
-	logfile, err := os.OpenFile("log/logs.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	logfile, err := os.OpenFile("log/readfile.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	file, err := os.Open(path)
 	if err != nil {
 		log.Fatal(err)
@@ -59,7 +59,7 @@ func Readfile(path string) []string {
 }
 
 func Readhtml(filePath string) []string {
-	logfile, err := os.OpenFile("log/logs.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	logfile, err := os.OpenFile("log/readfile.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	txt := []string{}
 	//解决中文乱码
 	var enc mahonia.Decoder
@@ -103,7 +103,7 @@ func Urlchange(urls string) (string, string) {
 func ReadSubdomainResult(path string) [][]string {
 	cvslens := [][]string{{}}
 	//创建日志
-	logfile, err := os.OpenFile("log/logs.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	logfile, err := os.OpenFile("log/readfile.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	cvsfile, err := os.Open(path)
 	if err != nil {
 		log.Fatal(err)

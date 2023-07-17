@@ -110,7 +110,7 @@ func finderjs(url string) []string {
 	flags := cmd.Wait()
 
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 
 	//jsfender扫描结果报告路径
@@ -204,7 +204,7 @@ func startCrawlerGo(url string, thread int) string {
 
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 
 	resultFilePath := crawlergoresultFilePath + outreport
@@ -408,7 +408,7 @@ func nucleiscan(url string, flag bool) {
 	}
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 	resultFilePath := nucleiresultFilePath + currentData + dom + ".json"
 	resultFile, err := os.Stat(resultFilePath)
@@ -552,7 +552,7 @@ func vulmapscan(url string, thread int, flag bool) {
 	}
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 	resultFilePath := fmt.Sprintf(vulmapresultFilePath+"%s.txt", currentData+dom)
 	resultFile, err := os.Stat(resultFilePath)
@@ -768,7 +768,7 @@ func pocbomberscan(url string, thread int, flag bool) {
 	}
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 	resultFilePath := fmt.Sprintf(pocbomberresultFilePath+"%s.txt", currentData+dom)
 	resultFile, err := os.Stat(resultFilePath)
@@ -802,18 +802,21 @@ func GetPocbomberResult(path string) map[int]map[string]string {
 	item := Readhtml(path)
 	pocbomtxt := make(map[int]map[string]string)
 	for i := 0; i < len(item); i += 5 {
-		//将Url: http://47.95.245.15:80 分割成 http://47.95.245.15:80
-		Name := strings.Split(item[i], ": ")
-		Vulnerable := strings.Split(item[i+1], ": ")
-		Url := strings.Split(item[i+2], ": ")
-		Payload := strings.Split(item[i+3], ": ")
-		About := strings.Split(item[i+4], ": ")
-		pocbomtxt[(i/5)+1] = map[string]string{
-			"Name":       Name[1],
-			"Vulnerable": Vulnerable[1],
-			"Url":        Url[1],
-			"Payload":    Payload[1],
-			"About":      About[1],
+		if i+4 < len(item) {
+			//fmt.Println(item)
+			//将Url: http://47.95.245.15:80 分割成 http://47.95.245.15:80
+			Name := strings.Split(item[i], ": ")
+			Vulnerable := strings.Split(item[i+1], ": ")
+			Url := strings.Split(item[i+2], ": ")
+			Payload := strings.Split(item[i+3], ": ")
+			About := strings.Split(item[i+4], ": ")
+			pocbomtxt[(i/5)+1] = map[string]string{
+				"Name":       Name[1],
+				"Vulnerable": Vulnerable[1],
+				"Url":        Url[1],
+				"Payload":    Payload[1],
+				"About":      About[1],
+			}
 		}
 	}
 	return pocbomtxt
@@ -843,7 +846,7 @@ func backfilescan(url string, thread int) {
 	}
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 	resultFilePath := BackFileScanresultFilePath + currentData + host + ".txt"
 	resultFile, err := os.Stat(resultFilePath)
@@ -887,7 +890,7 @@ func dirsearchscan(url string, thread int) {
 	}
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 	resultFilePath := dirsearchresultFilePath + currentData + host + ".txt"
 	resultFile, err := os.Stat(resultFilePath)
@@ -958,7 +961,7 @@ func katanascan(url string) {
 
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 	resultFilePath := fmt.Sprintf(katanaresultFilePath+"%s.txt", currentData+dom)
 	resultFile, err := os.Stat(resultFilePath)

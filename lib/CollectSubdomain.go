@@ -2,6 +2,7 @@ package lib
 
 import (
 	"bufio"
+	"fmt"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"log"
 	"os"
@@ -37,7 +38,7 @@ func Collect_Subdomain_un(sudbomain string) {
 	}
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 	//写入日志
 	log.SetOutput(sublog)
@@ -62,7 +63,7 @@ func Collect_Subdomain(sudbomain string) {
 
 	flags := cmd.Wait()
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 	log.SetOutput(sublog)
 

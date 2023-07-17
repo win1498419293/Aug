@@ -92,14 +92,16 @@ func AllScan(target, url string, thread int) {
 				txt = "http://" + txt
 				domain, _ = Urlchange(txt)
 			}
-			//fmt.Println(domain)
 
 			//收集子域名
 			Collect_Subdomain_un(domain)
+			fmt.Println("收集子域名")
 
+			//创建数据表
 			Connentdb()
+
+			//读取子域名扫描结果
 			SubdomainResultCsvPath := OneForAllresultFilePath + domain + ".csv"
-			fmt.Println(SubdomainResultCsvPath)
 
 			csvlens := ReadSubdomainResult(SubdomainResultCsvPath)
 			for i := 2; i < len(csvlens)-1; i++ {
@@ -112,7 +114,9 @@ func AllScan(target, url string, thread int) {
 					Status:    csvlens[i][12],
 					Title:     csvlens[i][14],
 				}
+				//将内容插入子域名表
 				properties.InsertTables()
+				fmt.Println("插入子域名表")
 			}
 		}
 		scan(thread)
@@ -178,10 +182,18 @@ func scan(thread int) {
 	//查询Task表进行指纹识别并获取cms字段写入Task表
 	TaskResultMap := SelectAllTaskdb("Service", "http")
 	for _, value := range TaskResultMap {
+		color.Cyan("开始指纹识别")
 		FingerScan(value["url"])
+		color.Cyan("指纹识别结束")
+		color.Yellow("开始vulmap扫描")
 		vulmapscan(value["url"], thread, flags)
+		color.Yellow("vulmap扫描结束")
+		color.Red("开始nuclei扫描")
 		nucleiscan(value["url"], flags)
+		color.Red("nuclei扫描结束")
+		color.White("开始pocbomber扫描")
 		pocbomberscan(value["url"], thread, flags)
+		color.White("pocbomber扫描结束")
 	}
 
 	//获取js敏感信息进行爬虫被动扫描漏洞
@@ -220,7 +232,7 @@ func scan(thread int) {
 		}
 	}
 	log.Println("漏洞扫描完成")
-	//runhtml()
+
 }
 
 func scanmode() {
@@ -233,7 +245,7 @@ func scanmode() {
 		start := time.Now() // 获取当前时间
 		txts := Readfile(file)
 		// 读取全部返回的urls，判断没有协议就加上协议
-		for i := 0; i < len(txts)-1; i++ {
+		for i := 0; i < len(txts); i++ {
 			url := txts[i]
 			c.Printf("%s开始扫描:", url)
 			fmt.Println()
@@ -337,8 +349,8 @@ func scanmode() {
 			dirsearchscan(urls, thread)
 		} else {
 			txts := Readfile(file)
-
-			for i := 0; i < len(txts)-1; i++ {
+			for i := 0; i < len(txts); i++ {
+				fmt.Println("开始扫描:", txts[i])
 				dirsearchscan(txts[i], thread)
 			}
 		}
@@ -410,7 +422,8 @@ func scanmode() {
 }
 func Startmain() {
 	scanmode()
-	
+	//pocbomberscan("http://36.155.98.9:27071/privatemanage/", 10, false)
+
 }
 
 func init() {
@@ -476,11 +489,11 @@ func removetmp(path, ftype string) {
 	for _, refile := range files {
 		//判断是否包含指定文件后辍名，安装文件类型删除
 		if strings.Contains(refile.Name(), ftype) {
-			color.Magenta("删除" + path + refile.Name() + "成功")
 			err := os.Remove(path + refile.Name())
 			if err != nil {
 				fmt.Println(err)
 			}
+			color.Magenta("删除" + path + refile.Name() + "成功")
 		}
 
 	}

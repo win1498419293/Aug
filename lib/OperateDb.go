@@ -204,55 +204,6 @@ func SelectSubdmaindb() (map[int]string, map[int]string) {
 	return checkcdn, checkwaf
 }
 
-/*
-func SelectAllTaskdb(ColumnName, Field string) map[int]map[string]string {
-	TxPortResultMap := make(map[int]map[string]string)
-	comm := fmt.Sprintf("SELECT DISTINCT * FROM Task where %s=?", ColumnName)
-	db, err := sql.Open("sqlite3", "result/Subdomain.db")
-	rows, err := db.Query(comm, Field)
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
-	i := 0
-	for rows.Next() {
-		var id string
-		var target string
-		var url string
-		var service string
-		var title string
-		var statusCode string
-		var banner string
-		var webserver string
-		var cms string
-		var times string
-		err = rows.Scan(&id, &target, &url, &service, &statusCode, &banner, &webserver, &title, &cms, &times)
-		if err != nil {
-			panic(err)
-		}
-		if i > 10 {
-			break
-		}
-		TxPortResultMap[i] = make(map[string]string)
-		TxPortResultMap[i]["id"] = id
-		TxPortResultMap[i]["target"] = target
-		TxPortResultMap[i]["url"] = url
-		TxPortResultMap[i]["service"] = service
-		TxPortResultMap[i]["title"] = title
-		TxPortResultMap[i]["statusCode"] = statusCode
-		TxPortResultMap[i]["banner"] = banner
-		TxPortResultMap[i]["webserver"] = webserver
-		TxPortResultMap[i]["cms"] = cms
-		TxPortResultMap[i]["times"] = times
-		//fmt.Println(id, target, url, service, title, statusCode, banner, webserver, times)
-		i++
-	}
-
-	return TxPortResultMap
-}
-
-*/
-
 func SelectAllTaskdb(ColumnName, Field string) map[int]map[string]string {
 	TxPortResultMap := make(map[int]map[string]string)
 	db, err := sql.Open("sqlite3", "result/Subdomain.db")
@@ -304,55 +255,6 @@ func SelectAllTaskdb(ColumnName, Field string) map[int]map[string]string {
 	return TxPortResultMap
 }
 
-// 获取子域名表数据
-/*
-func SelectAllSubdmaindb(ColumnName, Field string) map[int]map[string]string {
-	TableResultMap := make(map[int]map[string]string)
-	comm := fmt.Sprintf("SELECT * FROM Subdomain where %s=?", ColumnName)
-	db, err := sql.Open("sqlite3", "result/Subdomain.db")
-	rows, err := db.Query(comm, Field)
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
-	i := 0
-	for rows.Next() {
-		var id string
-		var url string
-		var subdomain string
-		var ip string
-		var port string
-		var status string
-		var title string
-		var cdn string
-		var waf string
-		err = rows.Scan(&id, &url, &subdomain, &ip, &port, &status, &waf, &title, &cdn)
-		if err != nil {
-			panic(err)
-		}
-		if i > 10 {
-			break
-		}
-		TableResultMap[i] = make(map[string]string)
-		TableResultMap[i]["id"] = id
-		TableResultMap[i]["url"] = url
-		TableResultMap[i]["subdomain"] = subdomain
-		TableResultMap[i]["ip"] = ip
-		TableResultMap[i]["port"] = port
-		TableResultMap[i]["status"] = status
-		TableResultMap[i]["waf"] = waf
-		TableResultMap[i]["title"] = title
-		TableResultMap[i]["cdn"] = cdn
-
-		//fmt.Println(id, url, subdomain, ip, port, status, title)
-		i++
-	}
-
-	return TableResultMap
-}
-
-
-*/
 // 获取子域名表数据
 func SelectAllSubdmaindb(ColumnName, Field string) map[int]map[string]string {
 	TableResultMap := make(map[int]map[string]string)

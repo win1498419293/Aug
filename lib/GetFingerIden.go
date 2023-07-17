@@ -2,6 +2,7 @@ package lib
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/fatih/color"
 	"log"
 	"os"
@@ -46,7 +47,7 @@ func FingerScan(url string) {
 	flags := cmd.Wait()
 
 	if flags == nil {
-		log.Println("运行结束")
+		fmt.Println("运行结束")
 	}
 	timeStr := time.Now().Format("20060102150405")
 	resultFilePath := FingerresultFilePath + timeStr + ".xlsx"
