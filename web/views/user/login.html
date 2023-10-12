@@ -396,7 +396,7 @@
                     if (result.code == 200) {
                         window.location.replace("/index");
                     } else {
-                        layer.alert(result.msg, {title: '提示', icon: 2})
+                        layer.alert(result.message, {title: '提示', icon: 2})
                         $('#password').val("").focus();
                     }
                 },

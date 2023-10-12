@@ -1,14 +1,14 @@
 package main
 
 import (
-	"Aug/lib"
+	"Aug/web"
 	"flag"
 )
 
 var mode bool
 
 func main() {
-	lib.Startmain()
+	web.Webmain()
 	/*
 		flag.Parse()
 		if mode {

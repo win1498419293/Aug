@@ -2,6 +2,7 @@ package router
 
 import (
 	"Aug/web/app/Controllers"
+	"Aug/web/app/Middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,10 +25,12 @@ func InitRouter() *gin.Engine {
 		admin.GET("/login", Controllers.Admingetlogin)
 		admin.POST("/home", Controllers.Adminhome)
 	}
-	user := r.Group("/user")
+	user := r.Group("/user").Use(Middleware.Authorization())
 
 	{
 		user.POST("/register", Controllers.Userinsert)
+		user.POST("/login", Controllers.UserLogin)
+		user.GET("/login", Controllers.Userlogin)
 		user.GET("/userinfo", Controllers.Userinfo)
 		user.POST("/index", Controllers.Userpostindex)
 		user.GET("/menu", Controllers.Usermenu)
@@ -40,7 +43,7 @@ func InitRouter() *gin.Engine {
 
 	}
 
-	scan := r.Group("/api/scan")
+	scan := r.Group("/api/scan").Use(Middleware.Authorization())
 	{
 		scan.GET("/portscan", Controllers.PortScan)
 		scan.GET("/ports", Controllers.GetPorts)

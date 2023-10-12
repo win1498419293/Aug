@@ -2,10 +2,12 @@ package Controllers
 
 import (
 	"Aug/web/app/Models"
+	"Aug/web/app/service"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"time"
 )
 
 // 注册管理用户
@@ -80,14 +82,33 @@ func Adminlogin(c *gin.Context) {
 		c.JSON(http.StatusOK, loginmsg)
 		return
 	}
-	loginmsg := Models.Loginmsg{
+
+	var loginRequest service.LoginInfo //  定义json 变量 数据结构类型 为 Models.Admins
+
+	claims := &service.JWTClaims{
+		UserID:      1,
+		Username:    loginRequest.Username,
+		Password:    loginRequest.Password,
+		FullName:    loginRequest.Username,
+		Permissions: []string{},
+	}
+	claims.IssuedAt = time.Now().Unix()
+	claims.ExpiresAt = time.Now().Add(time.Second * time.Duration(ExpireTime)).Unix()
+	signedToken, err := service.GetToken(claims)
+
+	if err != nil {
+		c.JSON(400, err.Error())
+		return
+	}
+	loginmsg := Models.Userlogmsg{
 		Status:   true,
-		Id:       json.Id,
 		Code:     200,
 		Username: json.Username,
 		Message:  "登录成功",
+		Token:    signedToken,
 	}
 	c.JSON(http.StatusOK, loginmsg)
+
 }
 
 func Adminindex(c *gin.Context) {

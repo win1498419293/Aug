@@ -49,6 +49,14 @@ type UserRspManager struct {
 	Count int64  `json:"count"`
 }
 
+type Userlogmsg struct {
+	Status   bool   `json:"status"  binding:"required"`
+	Code     int    `json:"code"  binding:"required"`
+	Username string `json:"username"  binding:"required"`
+	Message  string `json:"msg"  binding:"required"`
+	Token    string `json:"token" binding:"required"`
+}
+
 // Insert 新增user用户
 func (user *Users) UserInsert() (username string, err error) {
 	database.DB.AutoMigrate(&user) //  这里的DB变量是 database 包里定义的，Create 函数是 gorm包的创建数据API
@@ -97,4 +105,14 @@ func (user *Users) UserFindAll() (users []Users, err error) {
 		return users, err
 	}
 	return users, nil
+}
+
+// user登录
+func (user *UsersApiLoginReq) UserLogin(username string) (users UsersApiLoginReq, err error) {
+	result := database.DB.Where("username = ?", username).First(&user) // 这里的 &admins 跟返回参数要一致
+	if result.Error != nil {
+		err = result.Error
+		return
+	}
+	return
 }
