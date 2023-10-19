@@ -3,6 +3,7 @@ package Models
 import (
 	"Aug/web/database"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 // 登录请求参数
@@ -13,12 +14,13 @@ type UsersApiLoginReq struct {
 
 // 添加用户请求参数
 type Users struct {
-	Username string `v:"required|length:4,20#账号不能为空|账号长度应当在:min到:max之间"`
-	Password string `v:"required|length:6,20|password3#密码不能为空|密码长度应当在:min到:max之间|密码应包含大小写数字及特殊符号"`
-	NickName string `v:"required#昵称不能为空"`
-	Phone    string `v:"required|phone#手机号不能为空|手机号格式不正确"`
-	Email    string `v:"required|email#邮箱不能为空|邮箱格式不正确"`
-	Remark   string `v:"required#个性签名不能为空"`
+	gorm.Model        // 这里的配置可以让ORM 自动维护 时间戳字段，很爽有木有
+	Username   string `v:"required|length:4,20#账号不能为空|账号长度应当在:min到:max之间"`
+	Password   string `v:"required|length:6,20|password3#密码不能为空|密码长度应当在:min到:max之间|密码应包含大小写数字及特殊符号"`
+	NickName   string `v:"required#昵称不能为空"`
+	Phone      string `v:"required|phone#手机号不能为空|手机号格式不正确"`
+	Email      string `v:"required|email#邮箱不能为空|邮箱格式不正确"`
+	Remark     string `v:"required#个性签名不能为空"`
 }
 
 // 删除用户所需信息
@@ -34,12 +36,14 @@ type UserApiChangePasswordReq struct {
 }
 
 // 用户修改资料所需信息
-type UserApiSetInfoReq struct {
-	Username string `v:"required|length:4,20#账号不能为空|账号长度应当在:min到:max之间"`
-	NickName string `v:"required#昵称不能为空"`
-	Phone    string `v:"required|phone#手机号不能为空|手机号格式不正确"`
-	Email    string `v:"required|email#邮箱不能为空|邮箱格式不正确"`
-	Remark   string `v:"required#个性签名不能为空"`
+type UserInfo struct {
+	Id        int    `binding:"required"`
+	Username  string `v:"required|length:4,20#账号不能为空|账号长度应当在:min到:max之间"`
+	NickName  string `v:"required#昵称不能为空"`
+	Phone     string `v:"required|phone#手机号不能为空|手机号格式不正确"`
+	Email     string `v:"required|email#邮箱不能为空|邮箱格式不正确"`
+	Remark    string `v:"required#个性签名不能为空"`
+	create_at string `binding:"required"`
 }
 
 // 用户管理 模糊分页查询返回数据所需信息
@@ -79,7 +83,7 @@ func (user *UserApiDelReq) UserDestroy() (err error) {
 }
 
 // Update 修改user用户
-func (user *UserApiSetInfoReq) UserUpdate(Username string) (users UserApiSetInfoReq, err error) {
+func (user *UserInfo) UserUpdate(Username string) (users UserInfo, err error) {
 	result := database.DB.Model(&user).Where("Username = ?", Username).Updates(&user)
 	if result.Error != nil {
 		err = result.Error

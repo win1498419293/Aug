@@ -15,7 +15,7 @@ func InitRouter() *gin.Engine {
 	// web路由
 	r.GET("/", Controllers.Admingetlogin)
 	r.GET("/index", Controllers.Userindex)
-	admin := r.Group("/admin")
+	admin := r.Group("/admin").Use(Middleware.Authorization())
 	{
 		admin.POST("/register", Controllers.Admininsert)
 		admin.POST("/update", Controllers.Adminupdate)
@@ -34,13 +34,24 @@ func InitRouter() *gin.Engine {
 		user.GET("/userinfo", Controllers.Userinfo)
 		user.POST("/index", Controllers.Userpostindex)
 		user.GET("/menu", Controllers.Usermenu)
+		user.GET("/manager", Controllers.Usermanager)
+		user.GET("/manager/add", Controllers.Useradd)
+
 	}
 
-	uilt := r.Group("/uilt")
+	util := r.Group("/util/").Use(Middleware.Authorization())
 
 	{
-		uilt.GET("/uerinfo", Controllers.Userinfo)
+		util.GET("/uerinfo", Controllers.Userinfo)
+		util.GET("/portscan/manager", Controllers.Uiltportmanger)
 
+	}
+
+	users := r.Group("/api/user").Use(Middleware.Authorization())
+	{
+		users.GET("/manager", Controllers.GetUserinfo)
+		users.POST("/add", Controllers.Userinsert)
+		users.DELETE("/index", Controllers.UserDelete)
 	}
 
 	scan := r.Group("/api/scan").Use(Middleware.Authorization())

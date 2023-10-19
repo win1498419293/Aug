@@ -107,6 +107,8 @@ func Adminlogin(c *gin.Context) {
 		Message:  "登录成功",
 		Token:    signedToken,
 	}
+	cookie := service.Getcookie(c)
+	c.SetCookie("Crow", cookie, 3600, "/", "127.0.0.1", false, true)
 	c.JSON(http.StatusOK, loginmsg)
 
 }

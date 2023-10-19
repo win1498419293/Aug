@@ -111,6 +111,7 @@ func GetToken(claims *JWTClaims) (signedToken string, err error) {
 
 // 接口身份验证
 func GetDeployment(c *gin.Context) bool {
+
 	//身份认证
 	checkUser, _, err := Verify(c) //第二个值是用户名，这里没有使用
 	if err != nil {
@@ -118,7 +119,7 @@ func GetDeployment(c *gin.Context) bool {
 		return false
 	}
 	if checkUser == false {
-		c.JSON(400, gin.H{"err": "身份认证失败"})
+		//c.String(http.StatusOK, "身份验证失败，请重新登录")
 		return false
 	}
 	return true
