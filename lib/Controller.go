@@ -75,6 +75,15 @@ func banner() {
 		c := color.New(color.BlinkRapid, color.FgWhite).PrintlnFunc()
 		c(banne)
 		fmt.Println()
+
+	case 6:
+		fmt.Println()
+		show := "相信我"
+
+		banne := " ____                         _______                        ______ ___ ______ _  _   \n |  _ \\                       |__   __|                      |____  |__ \\____  | || |  \n | |_) |_ __ __ ___   _____      | | __ _ _ __   __ _  ___       / /   ) |  / /| || |_ \n |  _ <| '__/ _` \\ \\ / / _ \\     | |/ _` | '_ \\ / _` |/ _ \\     / /   / /  / / |__   _|\n | |_) | | | (_| |\\ V / (_) |    | | (_| | | | | (_| | (_) |   / /   / /_ / /     | |  \n |____/|_|  \\__,_| \\_/ \\___/     |_|\\__,_|_| |_|\\__, |\\___/   /_/   |____/_/      |_|  \n                                                 __/ |                                 \n                                                |___/                                  " + show
+		c := color.New(color.BlinkRapid, color.FgWhite).PrintlnFunc()
+		c(banne)
+		fmt.Println()
 	default:
 		fmt.Println()
 		show := "吾儿王腾有大帝之资！"
@@ -107,11 +116,33 @@ func AllScan(target, url, src string, thread int) {
 
 			//收集子域名
 			Collect_Subdomain_un(domain)
+
 			fmt.Println("正在收集子域名")
 
 			//创建数据表
 			Connentdb()
+			result := Subfinder(urls)
+			for i := 0; i < len(result)-1; i++ {
+				str := strings.Split(result[i], "")
+				for k := 0; k < len(str)-1; k += 3 {
+					if k+3 < len(str) {
+						properties := SubdomainNameProperties{
+							//Id:        csvlens[i][0],
+							Src:       src,
+							Url:       str[0],
+							Subdomain: domain,
+							Ip:        str[3],
+							Status:    str[1],
+							Title:     str[2],
+						}
+						//将内容插入子域名表
+						properties.InsertTables()
+						fmt.Println("插入子域名表")
+					}
 
+				}
+
+			}
 			//读取子域名扫描结果
 			SubdomainResultCsvPath := OneForAllresultFilePath + domain + ".csv"
 
@@ -123,7 +154,6 @@ func AllScan(target, url, src string, thread int) {
 					Url:       csvlens[i][4],
 					Subdomain: csvlens[i][5],
 					Ip:        csvlens[i][8],
-					Port:      csvlens[i][11],
 					Status:    csvlens[i][12],
 					Title:     csvlens[i][14],
 				}
@@ -147,6 +177,28 @@ func AllScan(target, url, src string, thread int) {
 		Collect_Subdomain_un(domain)
 
 		Connentdb()
+		result := Subfinder(urls)
+		for i := 0; i < len(result)-1; i++ {
+			str := strings.Split(result[i], "")
+			for k := 0; k < len(str)-1; k += 3 {
+				if k+3 < len(str) {
+					properties := SubdomainNameProperties{
+						//Id:        csvlens[i][0],
+						Src:       src,
+						Url:       str[0],
+						Subdomain: domain,
+						Ip:        str[3],
+						Status:    str[1],
+						Title:     str[2],
+					}
+					//将内容插入子域名表
+					properties.InsertTables()
+					fmt.Println("插入子域名表")
+				}
+
+			}
+
+		}
 		SubdomainResultCsvPath := OneForAllresultFilePath + domain + ".csv"
 		//fmt.Println(SubdomainResultCsvPath)
 
@@ -159,7 +211,6 @@ func AllScan(target, url, src string, thread int) {
 				Url:       csvlens[i][4],
 				Subdomain: csvlens[i][5],
 				Ip:        csvlens[i][8],
-				Port:      csvlens[i][11],
 				Status:    csvlens[i][12],
 				Title:     csvlens[i][14],
 			}
@@ -210,6 +261,7 @@ func Scan(src, url string, thread int) {
 	num := len(TaskResultMap)
 	sum := 1
 	for _, value := range TaskResultMap {
+		Webscreenshot(value["url"])
 		fmt.Println("正在扫描第", sum, "个url，还有", num, "需要url扫描")
 		color.Cyan("开始指纹识别")
 		FingerScan(value["url"])
@@ -276,6 +328,65 @@ func scanmode() {
 	banner()
 	flag.Parse()
 	switch mode {
+	case "csub":
+		start := time.Now() // 获取当前时间
+		subfinderFilePath := Readyaml("Subfinder.resultFilePath")
+		c.Printf("%s开始子域名收集:", urls)
+		fmt.Println()
+		txt := ""
+		domain := ""
+		properties := SubdomainNameProperties{}
+		if file == "" {
+			//Collect_Subdomain_un(urls)
+			result := Subfinder(urls)
+			for i := 0; i < len(result); i++ {
+				writetxt(result[i], subfinderFilePath+urls+".txt")
+				if flags {
+					//创建数据表
+					Connentdb()
+					str := strings.Split(result[i], " ")
+					for k := 0; k < len(str)-1; k += 3 {
+						if k+3 < len(str) {
+							properties = SubdomainNameProperties{
+								Src:       src,
+								Url:       str[0],
+								Subdomain: urls,
+								Ip:        str[3],
+								Status:    str[1],
+								Title:     str[2],
+							}
+
+						}
+
+					}
+					//将内容插入子域名表
+					properties.InsertTables()
+					fmt.Println("插入子域名表")
+				} else {
+					fmt.Println(result[i])
+				}
+			}
+		} else {
+			txts := Readfile(file)
+			// 读取全部返回的urls，判断没有协议就加上协议
+			for i := 0; i < len(txts)-1; i++ {
+				txt = txts[i]
+				//fmt.Println(txts[i])
+				if strings.Contains(txt, "http") {
+					domain, _ = Urlchange(txt)
+				} else {
+					txt = "http://" + txt
+					domain, _ = Urlchange(txt)
+				}
+				//收集子域名
+				Collect_Subdomain_un(domain)
+				Subfinder(domain)
+			}
+		}
+		c.Printf("%s子域名收集完成", urls)
+		elapsed := time.Since(start)
+		color.Cyan("执行完成耗时：%s", elapsed)
+
 	case "f":
 		start := time.Now() // 获取当前时间
 		txts := Readfile(file)
@@ -479,11 +590,11 @@ func scanmode() {
 	}
 }
 func Startmain() {
-	//scanmode()
+	scanmode()
+	//Webscreenshot(urls)
 	//lib.MssqlScan("MSSQLSCAN", "1.116.24.217")
 	//cscan("104.21.43.32")
-	Weak_Pass_Burst.SshScan("sshscan", "101.43.49.191")
-	//web.Webmain()
+	//Weak_Pass_Burst.SshScan("sshscan", "101.43.49.191")
 
 }
 
@@ -506,7 +617,7 @@ func init() {
 	flag.StringVar(&mode, "m", "", "扫描类型，示例 -m all全流程扫描，-m f 读取文件内容扫描,-m vs漏洞扫描,不加-m 默认为单url扫描,-m ps端口扫描，-m ds目录扫描 -m sf备份文件+目录扫描,-m rh查看任务数据, -m clear 清除扫描的结果文件")
 }
 
-// 按照类型删除报错的扫描结果文件
+// 按照类型删除扫描结果文件
 func SelectPath(ftype string) {
 	switch {
 	case ftype == ".json":
@@ -527,6 +638,8 @@ func SelectPath(ftype string) {
 		removetmp(dirsearchfile, ftype)
 		CDNcheckexe := Readyaml("CDNcheck.resultFilePath")
 		removetmp(CDNcheckexe, ftype)
+		Subfinderfile := Readyaml("Subfinder.resultFilePath")
+		removetmp(Subfinderfile, ftype)
 
 		pocbomberfile := Readyaml("POC_bomber.resultFilePath")
 		removetmp(pocbomberfile, ftype)

@@ -26,7 +26,6 @@ func Connentdb() {
 				Url  TEXT,
 				Subdomain TEXT NOT NULL,
 				Ip TEXT,
-				Port TEXT,
 				Status TEXT,
 				Waf TEXT,
 				Title TEXT,
@@ -83,7 +82,7 @@ func Connentdb() {
 func (spn SubdomainNameProperties) InsertTables() {
 
 	db, err := sql.Open("sqlite3", "result/Subdomain.db")
-	stmt, err := db.Prepare("INSERT INTO Subdomain(Src,Url, Subdomain,Ip,Port,Status,Waf,Title,Cdn,CreateTime) values(?, ?, ?, ?, ?, ?, ?, ?, ? ,?)")
+	stmt, err := db.Prepare("INSERT INTO Subdomain(Src,Url, Subdomain,Ip,Status,Waf,Title,Cdn,CreateTime) values(?, ?, ?, ?, ?, ?, ?, ?, ? )")
 	if err != nil {
 		panic(err)
 	}
@@ -92,14 +91,13 @@ func (spn SubdomainNameProperties) InsertTables() {
 	Src := spn.Src
 	Subdomain := spn.Subdomain
 	Ip := spn.Ip
-	Port := spn.Port
 	Status := spn.Status
 	Title := spn.Title
 	Cdn := ""
 	Waf := ""
 	timeStr := time.Now().Format("2006-01-02 15:04:05")
 	CreateTime := timeStr
-	res, err := stmt.Exec(Src, Url, Subdomain, Ip, Port, Status, Waf, Title, Cdn, CreateTime)
+	res, err := stmt.Exec(Src, Url, Subdomain, Ip, Status, Waf, Title, Cdn, CreateTime)
 	if err != nil {
 		panic(err)
 	}
@@ -191,13 +189,12 @@ func SelectSubdmaindb(sr, url string) (map[int]string, map[int]string) {
 		var url string
 		var subdomain string
 		var ip string
-		var port string
 		var status string
 		var title string
 		var cdn string
 		var waf string
 		var createtime string
-		err = rows.Scan(&id, &src, &url, &subdomain, &ip, &port, &status, &waf, &title, &cdn, &createtime)
+		err = rows.Scan(&id, &src, &url, &subdomain, &ip, &status, &waf, &title, &cdn, &createtime)
 		if err != nil {
 			panic(err)
 		}
@@ -206,7 +203,6 @@ func SelectSubdmaindb(sr, url string) (map[int]string, map[int]string) {
 		TableResultMap["url"] = url
 		TableResultMap["subdomain"] = subdomain
 		TableResultMap["ip"] = ip
-		TableResultMap["port"] = port
 		TableResultMap["status"] = status
 		TableResultMap["waf"] = waf
 		TableResultMap["title"] = title
@@ -342,13 +338,12 @@ func SelectAllSubdmaindb(params ...string) map[int]map[string]string {
 		var url string
 		var subdomain string
 		var ip string
-		var port string
 		var status string
 		var title string
 		var cdn string
 		var waf string
 		var createtime string
-		err = rows.Scan(&id, &src, &url, &subdomain, &ip, &port, &status, &waf, &title, &cdn, &createtime)
+		err = rows.Scan(&id, &src, &url, &subdomain, &ip, &status, &waf, &title, &cdn, &createtime)
 		if err != nil {
 			panic(err)
 		}
@@ -361,7 +356,6 @@ func SelectAllSubdmaindb(params ...string) map[int]map[string]string {
 		TableResultMap[i]["url"] = url
 		TableResultMap[i]["subdomain"] = subdomain
 		TableResultMap[i]["ip"] = ip
-		TableResultMap[i]["port"] = port
 		TableResultMap[i]["status"] = status
 		TableResultMap[i]["waf"] = waf
 		TableResultMap[i]["title"] = title

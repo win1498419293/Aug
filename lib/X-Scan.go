@@ -1033,6 +1033,7 @@ func Katanascan(url string) {
 	log.SetOutput(XScanlog)
 }
 
+// 读取txt文件信息
 func GetKatanaResult(path string) []string {
 	item := Readhtml(path)
 	return item

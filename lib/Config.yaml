@@ -49,3 +49,6 @@ URLPath :
 
 ChromePath :
   chromePathexe : C:\Program Files\Google\Chrome\Application\chrome.exe
+Subfinder:
+  subfinderexe: ./tools/subfinder/
+  resultFilePath: ./tools/subfinder/result/
