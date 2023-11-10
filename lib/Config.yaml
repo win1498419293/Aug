@@ -40,15 +40,21 @@ vulmap :
 wafw00f : 
   wafw00ffile : tools/wafw00f/wafw00f
   resultFilePath : ./tools/wafw00f/wafw00f/
-xray : 
+xray :
   xrayexe : tools/xray
-  resultFilePath : ./tools/xray/result/
-URLPath : 
-  urlpathexe : tools/URLPath
-  resultFilePath : ./tools/URLPath/
+  resultFilePath: ./tools/xray/result/
+URLPath:
+  urlpathexe: tools/URLPath
+  resultFilePath: ./tools/URLPath/
 
-ChromePath :
-  chromePathexe : C:\Program Files\Google\Chrome\Application\chrome.exe
+ChromePath:
+  chromePathexe: C:\Program Files\Google\Chrome\Application\chrome.exe
 Subfinder:
   subfinderexe: ./tools/subfinder/
   resultFilePath: ./tools/subfinder/result/
+Dirscan:
+  dirscanexe: ./tools/dirscan/
+  resultFilePath: ./tools/dirscan/result/
+EHole:
+  EHoleexe: ./tools/EHole/
+  resultFilePath: ./tools/EHole/result/

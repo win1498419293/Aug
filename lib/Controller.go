@@ -32,6 +32,7 @@ var (
 	thread int
 	flags  bool //是否将发现的漏洞信息插入到数据库
 	src    string
+	output string
 )
 
 func banner() {
@@ -264,7 +265,8 @@ func Scan(src, url string, thread int) {
 		Webscreenshot(value["url"])
 		fmt.Println("正在扫描第", sum, "个url，还有", num, "需要url扫描")
 		color.Cyan("开始指纹识别")
-		FingerScan(value["url"])
+		FingerScan(value["url"], flags)
+		EHolescan(value["url"], output)
 		color.Cyan("指纹识别结束")
 		color.Yellow("开始vulmap扫描")
 		Vulmapscan(value["url"], src, thread, flags)
@@ -340,7 +342,12 @@ func scanmode() {
 			//Collect_Subdomain_un(urls)
 			result := Subfinder(urls)
 			for i := 0; i < len(result); i++ {
-				writetxt(result[i], subfinderFilePath+urls+".txt")
+				if output != "" {
+					savetxt(result[i], subfinderFilePath+output)
+				} else {
+					c.Printf("%s开始子域名收集:", result[i])
+				}
+
 				if flags {
 					//创建数据表
 					Connentdb()
@@ -387,21 +394,16 @@ func scanmode() {
 		elapsed := time.Since(start)
 		color.Cyan("执行完成耗时：%s", elapsed)
 
-	case "f":
+	case "fs":
 		start := time.Now() // 获取当前时间
-		txts := Readfile(file)
-		// 读取全部返回的urls，判断没有协议就加上协议
-		for i := 0; i < len(txts); i++ {
-			url := txts[i]
-			c.Printf("%s开始扫描:", url)
-			fmt.Println()
-			JsSensitiveData := Finderjs(url)
-			Katanascan(url)
-			for i := 0; i < len(JsSensitiveData); i++ {
-				StartCrawlerGo(JsSensitiveData[i], thread)
+		if file == "" {
+			c.Printf("%s开始指纹扫描:", urls)
+			EHolescan(urls, output)
+		} else {
+			txts := Readfile(file)
+			for i := 0; i < len(txts); i++ {
+				EHolescan(txts[i], output)
 			}
-			c.Printf("%s扫描完成", url)
-
 		}
 		elapsed := time.Since(start)
 		color.Cyan("执行完成耗时：%s", elapsed)
@@ -423,9 +425,19 @@ func scanmode() {
 		color.Cyan("执行完成耗时：%s", elapsed)
 	case "ps":
 		start := time.Now() // 获取当前时间
-		c.Printf("%s开始端口扫描%s: ", ip, ports)
-		fmt.Println()
-		IpScan(flags, ip, ports, src)
+		if file == "" {
+			c.Printf("%s开始端口扫描%s: ", ip, ports)
+			fmt.Println()
+			IpScan(flags, ip, ports, src, output)
+		} else {
+			txts := Readfile(file)
+			// 读取全部返回的urls，判断没有协议就加上协议
+			for i := 0; i < len(txts)-1; i++ {
+				c.Printf("%s开始端口扫描%s: ", txts[i], ports)
+				fmt.Println()
+				IpScan(flags, txts[i], ports, src, output)
+			}
+		}
 		c.Printf("%s端口扫描完成 ", ip)
 		elapsed := time.Since(start)
 		color.Cyan("执行完成耗时：%s", elapsed)
@@ -435,7 +447,8 @@ func scanmode() {
 		fmt.Println()
 		if file == "" {
 			color.Cyan("开始指纹识别")
-			FingerScan(urls)
+			FingerScan(urls, flags)
+			EHolescan(urls, output)
 			color.Cyan("指纹识别结束")
 			color.Yellow("开始vulmap扫描")
 			Vulmapscan(urls, src, thread, flags)
@@ -454,7 +467,8 @@ func scanmode() {
 			// 读取全部返回的urls，判断没有协议就加上协议
 			for i := 0; i < len(txts)-1; i++ {
 				color.Cyan("%s:开始指纹识别", txts[i])
-				FingerScan(txts[i])
+				FingerScan(txts[i], flags)
+				EHolescan(txts[i], output)
 				color.Cyan("%s:指纹识别结束", txts[i])
 				color.Yellow("%s:开始vulmap扫描", txts[i])
 				Vulmapscan(txts[i], src, thread, flags)
@@ -499,11 +513,17 @@ func scanmode() {
 		fmt.Println()
 		if file == "" {
 			Dirsearchscan(urls, thread)
+			Dirscan(urls, thread)
 		} else {
 			txts := Readfile(file)
 			for i := 0; i < len(txts); i++ {
 				fmt.Println("开始扫描:", txts[i])
 				Dirsearchscan(txts[i], thread)
+				Dirscan(txts[i], thread)
+				JsSensitiveData := Finderjs(txts[i])
+				for _, v := range JsSensitiveData {
+					fmt.Println(v)
+				}
 			}
 		}
 		c.Printf("%s目录扫描完成: ", urls)
@@ -532,7 +552,8 @@ func scanmode() {
 			Dirsearchscan(urls, thread)
 			color.Magenta("目录扫描结束")
 			color.Cyan("开始指纹识别")
-			FingerScan(urls)
+			FingerScan(urls, flags)
+			EHolescan(urls, output)
 			color.Cyan("指纹识别结束")
 			color.Yellow("开始vulmap扫描")
 			Vulmapscan(urls, src, thread, flags)
@@ -613,8 +634,10 @@ func init() {
 	flag.StringVar(&ports, "p", "-t1000", "ports，需要扫描的端口或端口范围,如-p 1-100，-p 100")
 	//端口范围
 	flag.StringVar(&src, "src", "", "src，厂商名称 -src 小米")
+	//结果输出
+	flag.StringVar(&output, "o", "", "--output，结果输出保存到文件")
 	//模式选择：默认单站点扫描  all多全流程扫描 vul仅漏洞扫描
-	flag.StringVar(&mode, "m", "", "扫描类型，示例 -m all全流程扫描，-m f 读取文件内容扫描,-m vs漏洞扫描,不加-m 默认为单url扫描,-m ps端口扫描，-m ds目录扫描 -m sf备份文件+目录扫描,-m rh查看任务数据, -m clear 清除扫描的结果文件")
+	flag.StringVar(&mode, "m", "", "扫描类型，示例 -m all全流程扫描，-m csub 子域名收集， -m fs 指纹识别扫描,-m vs漏洞扫描,不加-m 默认为单url扫描,-m ps端口扫描，-m ds目录扫描 -m sf备份文件+目录扫描,-m rh查看任务数据, -m clear 清除扫描的结果文件")
 }
 
 // 按照类型删除扫描结果文件
@@ -625,6 +648,8 @@ func SelectPath(ftype string) {
 		removetmp(TxPortMapresultFilePath, ftype)
 		nucleiexe := Readyaml("nuclei.resultFilePath")
 		removetmp(nucleiexe, ftype)
+		EHoleexe := Readyaml("EHole.resultFilePath")
+		removetmp(EHoleexe, ftype)
 	case ftype == ".html":
 		jsfinderfile := Readyaml("JSFinderPlus.resultFilePath")
 		removetmp(jsfinderfile, ftype)
@@ -640,11 +665,13 @@ func SelectPath(ftype string) {
 		removetmp(CDNcheckexe, ftype)
 		Subfinderfile := Readyaml("Subfinder.resultFilePath")
 		removetmp(Subfinderfile, ftype)
-
 		pocbomberfile := Readyaml("POC_bomber.resultFilePath")
 		removetmp(pocbomberfile, ftype)
 		FindSomeThingfile := Readyaml("FindSomeThing.resultFilePath")
 		removetmp(FindSomeThingfile, ftype)
+		Dirscanfile := Readyaml("dirscan.resultFilePath")
+		removetmp(Dirscanfile, ftype)
+
 	case ftype == ".csv":
 		OneForAllresultFilePath := Readyaml("OneForAll.resultFilePath")
 		fmt.Println(OneForAllresultFilePath)

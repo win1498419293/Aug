@@ -213,11 +213,16 @@ func IpScan(flag bool, params ...string) {
 	ip = params[0]
 	ports = params[1]
 	src = params[2]
+	path := ""
 	surl := " "
-	if len(params) >= 3 {
+	if len(params) > 3 && strings.Contains(params[3], ".txt") {
+		path = params[3]
+	} else {
 		surl = params[3]
 	}
-
+	if len(params) > 4 && strings.Contains(".txt", params[4]) {
+		path = params[4]
+	}
 	if ports != "-t1000" {
 		ports = " -p " + ports
 	}
@@ -259,6 +264,13 @@ func IpScan(flag bool, params ...string) {
 			Times:      value["Times"],
 		}
 		c.Println("Target:", value["Target"], "Service: ", value["Service"], "Banner: ", value["Banner"])
+		results := fmt.Sprintf("%s  %s %s %s \r\n ", value["Target"], value["Title"], value["Banner"], value["Service"])
+		if path != "" {
+			//不存活的端口不写入文件
+			if value["Title"] != "" && value["Banner"] != "" {
+				savetxt(results, path)
+			}
+		}
 		if flag {
 			tpms.InsertTaskTables()
 		}

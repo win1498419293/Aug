@@ -877,7 +877,8 @@ func Dirsearchscan(url string, thread int) {
 		url = "http://" + url
 	}
 	_, host := Urlchange(url)
-	com := "python dirsearch.py -t " + strconv.Itoa(thread) + " -u " + url + " --random-agent -x 404 -r --max-recursion-depth 3 --recursion-status 200 --format plain -o result\\" + currentData + host + ".txt"
+	host = strings.Replace(host, ":", "-", 1)
+	com := "python dirsearch.py -t " + strconv.Itoa(thread) + " -u " + url + " --random-agent -x 404 -r --max-recursion-depth 3 --recursion-status 200 --format plain -o result\\" + currentData + "-" + host + ".txt"
 	cmd := exec.Command("cmd", "/c", com)
 	cmd.Dir = dirsearchfile
 	var out bytes.Buffer
@@ -890,24 +891,141 @@ func Dirsearchscan(url string, thread int) {
 	}
 	flags := cmd.Wait()
 	if flags == nil {
+		fmt.Println("Dirsearch运行结束")
+	}
+	/*
+		下面dirscan方法已经包含了读取扫描结果并打印信息
+		resultFilePath := dirsearchresultFilePath + currentData + "-" + host + ".txt"
+		resultFile, err := os.Stat(resultFilePath)
+		if err == nil && resultFile.Size() > 0 {
+			//获取扫描结果
+			item := GetKatanaResult(resultFilePath)
+			var kl string
+			for index, value := range item {
+				if index > 1 {
+					value = strings.Replace(value, "\n", "", -1)
+					newvalue := strings.Split(value, " ")
+					kl = newvalue[1] + newvalue[2] + newvalue[3] + newvalue[4] + newvalue[5] + newvalue[6]
+					if kl != "0B" && newvalue[0] == "200" {
+						color.Red("存在目录：%s", value)
+					} else {
+						color.Yellow("存在目录：%s", value)
+					}
+				}
+
+			}
+		}
+
+	*/
+	log.SetOutput(XScanlog)
+}
+
+func Dirscan(url string, thread int) {
+	XScanlog, err := os.OpenFile("log/XScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	dirscanresultFilePath := Readyaml("dirscan.resultFilePath")
+	dirscanfile := Readyaml("dirscan.dirscanexe")
+	resultfile, err := os.Stat(dirscanresultFilePath)
+
+	if !(err == nil && resultfile.Size() > 0) {
+		os.Mkdir(dirscanresultFilePath, os.ModePerm)
+	}
+
+	now := time.Now()
+	currentData := now.Format("2006-01-02")
+	//只有域名的话，添加协议
+	if !strings.Contains(url, "http") {
+		url = "http://" + url
+	}
+	_, host := Urlchange(url)
+	host = strings.Replace(host, ":", "-", 1)
+
+	cmd := exec.Command("cmd", "/C", "dirscan -T "+strconv.Itoa(thread)+" -u "+url+"  -o result\\"+currentData+"-"+host+".txt")
+	cmd.Dir = dirscanfile
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
+	err = cmd.Run()
+	if err != nil {
+		log.Fatalf("Dirsearchscan cmd.Run() failed with %s\n", err, stderr.String())
+	}
+	flags := cmd.Wait()
+	if flags == nil {
 		fmt.Println("运行结束")
 	}
-	resultFilePath := dirsearchresultFilePath + currentData + host + ".txt"
+
+	//读取dirscan扫描结果
+	datas := []string{}
+	resultFilePath := dirscanresultFilePath + currentData + "-" + host + ".txt"
 	resultFile, err := os.Stat(resultFilePath)
 	if err == nil && resultFile.Size() > 0 {
 		//获取扫描结果
 		item := GetKatanaResult(resultFilePath)
-		var kl string
+		for _, value := range item {
+			value = strings.Replace(value, "\n", "     ", -1)
+			newvalue := strings.Split(value, " ")
+			//fmt.Println(newvalue[6], newvalue[7], newvalue[11])
+			datas = append(datas, newvalue[6]+"    "+newvalue[7]+"    "+newvalue[11])
+		}
+	}
+	//读取dirscan扫描结果
+	dirsearchresultFilePath := Readyaml("dirsearch.resultFilePath")
+	dirsearchresult := dirsearchresultFilePath + currentData + "-" + host + ".txt"
+	dirsearchresultFile, err := os.Stat(dirsearchresult)
+	if err == nil && dirsearchresultFile.Size() > 0 {
+		//获取扫描结果
+		item := GetKatanaResult(dirsearchresult)
 		for index, value := range item {
-			if index > 1 {
-				value = strings.Replace(value, "\n", "", -1)
+			//跳过第一行跟最后一行
+			if index > 1 && value != "\r\n" {
+				//删除结尾\r\n
+				value = strings.Replace(value, "\r\r\n", " ", -1)
+				//根据空格分割字符串
 				newvalue := strings.Split(value, " ")
-				kl = newvalue[1] + newvalue[2] + newvalue[3] + newvalue[4] + newvalue[5] + newvalue[6]
-				if kl != "0B" && newvalue[0] == "200" {
-					color.Red("存在目录：%s", value)
-				} else {
-					color.Yellow("存在目录：%s", value)
+				//fmt.Println(newvalue[0], newvalue[3], newvalue[6])
+			Loop:
+				for i := 0; i < len(datas); i++ {
+					//结果集中不存在则添加到结果集中，下面是处理成结果格式信息详情
+					if newvalue[6] == "" {
+						if newvalue[7] != "" {
+							newvalue[7] = strings.Replace(newvalue[7], "\r\n", "", 1)
+							result7 := "[" + newvalue[0] + "]  " + "  [" + newvalue[4] + "]     " + newvalue[7]
+							if datas[i] != result7 {
+								newvalue[7] = strings.Replace(newvalue[7], "\r\n", "", 1)
+								datas = append(datas, result7)
+								break Loop
+							}
+						} else {
+							newvalue[8] = strings.Replace(newvalue[8], "\r\n", "", 1)
+							result8 := "[" + newvalue[0] + "]  " + "  [" + newvalue[5] + "]      " + newvalue[8]
+							if datas[i] != result8 {
+								newvalue[8] = strings.Replace(newvalue[8], "\r\n", "", 1)
+								datas = append(datas, result8)
+								break Loop
+							}
+						}
+					} else {
+						newvalue[6] = strings.Replace(newvalue[6], "\r\n", "", 1)
+						result6 := "[" + newvalue[0] + "]  " + "  [" + newvalue[3] + "]    " + newvalue[6]
+						if datas[i] != result6 {
+							datas = append(datas, result6)
+							break Loop
+						}
+					}
+
 				}
+			}
+
+		}
+		//去重
+		newdatas := removeDuplicateElement(datas)
+		for i := 0; i < len(newdatas); i++ {
+			newvalue := strings.Split(newdatas[i], "   ")
+
+			if newvalue[1] != "[0B]" && newvalue[0] == "[200]" {
+				color.Red("存在目录：%s", newdatas[i])
+			} else {
+				color.Yellow("存在目录：%s", newdatas[i])
 			}
 
 		}

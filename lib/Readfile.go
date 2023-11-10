@@ -174,10 +174,30 @@ func Readyaml(parameter string) string {
 
 }
 
-func writetxt(str, path string) {
-	//创建一个新文件，写入内容 5 句 “http://c.biancheng.net/golang/”
+// 写入txt文件，模式追加
+func savetxt(str, path string) {
 	filePath := path
 	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
+	if err != nil {
+		fmt.Println("文件打开失败", err)
+	}
+	//及时关闭file句柄
+	defer file.Close()
+	//写入文件时，使用带缓存的 *Writer
+	write := bufio.NewWriter(file)
+	// 指定输出编码格式为 GBK
+	encoder := simplifiedchinese.GBK.NewEncoder()
+	utf8Writer := transform.NewWriter(write, encoder)
+	byteArr := []byte(str)
+	utf8Writer.Write(byteArr)
+	//Flush将缓存的文件真正写入到文件中
+	write.Flush()
+}
+
+// 写入txt文件，模式新建
+func writetxt(str, path string) {
+	filePath := path
+	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		fmt.Println("文件打开失败", err)
 	}
