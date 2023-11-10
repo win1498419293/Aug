@@ -15,7 +15,7 @@
         
   -m  string  
 
-        扫描类型，示例 -m all全流程扫描, -m f 读取文件内容扫描,-m vs漏洞扫描,不加-m 默认为单url扫描,-m ps端口扫描,-m ds目录扫描 -m sf备份文件+目录扫描,-m rh查看任务数据, -m clear 清除扫描的结果文件  
+        扫描类型，示例 -m all全流程扫描, -m csub 子域名收集 ,-m fs web指纹识别,-m vs漏洞扫描,不加-m 默认为单url扫描,-m ps端口扫描,-m ds目录扫描 -m sf备份文件+目录扫描,-m rh查看任务数据, -m clear 清除扫描的结果文件, -m cs c段扫描+服务扫描爆破  
         
   -p  string  
   
@@ -24,6 +24,14 @@
   -s   bool    
         
         save,是否将扫描发现的问题保存到数据库里  
+        
+  -o string
+
+        output,将扫描结果写入保存到文件里
+    
+  -src
+  
+        src, src或公司名称
   
   -t  int  
   
@@ -32,6 +40,12 @@
   -u  string  
   
         url，待扫描的url  
+
+        
+  -us  bool
+  
+      -us，加上-us开启web
+  
 
 ![image](https://github.com/win1498419293/Aug/assets/44251830/aed5224f-7f4b-417a-9222-54593af3351c)
   
