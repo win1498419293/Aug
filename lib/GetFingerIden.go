@@ -34,9 +34,14 @@ type Website struct {
 	Length     int
 }
 
-func FingerScan(url string, flags bool) {
+func FingerScan(flags bool, params ...string) {
 	FingerresultFilePath := Readyaml("Finger.resultFilePath")
 	Fingerfile := Readyaml("Finger.Fingerfile")
+	url := params[0]
+	paths := ""
+	if len(params) > 1 {
+		paths = params[1]
+	}
 	//只有域名的话，添加协议
 	if !strings.Contains(url, "http") {
 		url = "http://" + url
@@ -73,6 +78,10 @@ func FingerScan(url string, flags bool) {
 			Isp:     csvlens[9],
 		}
 		color.Green("%s  %s  %s  %s %s", csvlens[0], csvlens[1], csvlens[2], csvlens[3], csvlens[4])
+		results := fmt.Sprintf("%s  %s %s %s  %s \r\n ", csvlens[0], csvlens[1], csvlens[2], csvlens[3], csvlens[4])
+		if paths != "" {
+			savetxt(results, paths)
+		}
 		//fmt.Println(finger.Url, finger.Title)
 		if flags {
 			updateTask("Cms", finger.Cms, finger.Url)
@@ -89,7 +98,7 @@ func EHolescan(url, path string) {
 		}
 	}()
 	EHoleresultFilePath := Readyaml("EHole.resultFilePath")
-	//EHolefile := Readyaml("EHole.EHoleexe")
+	EHolefile := Readyaml("EHole.EHoleexe")
 	//只有域名的话，添加协议
 	if !strings.Contains(url, "http") {
 		url = "http://" + url
@@ -101,22 +110,20 @@ func EHolescan(url, path string) {
 	_, host := Urlchange(url)
 	host = strings.Replace(host, ":", "-", 1)
 	host = strings.Replace(host, ".", "-", -1)
-	/*
-		com := fmt.Sprintf("EHole finger -u %s -o result\\%s-%s.json", url, currentData, host)
-		cmd := exec.Command("cmd", "/C", com)
-		cmd.Dir = EHolefile
-		var out bytes.Buffer
-		var stderr bytes.Buffer
-		cmd.Stdout = &out
-		cmd.Stderr = &stderr
-		err = cmd.Run()
-		flags := cmd.Wait()
-		if flags == nil {
-			fmt.Println("EHole运行结束")
-		}
 
+	com := fmt.Sprintf("EHole finger -u %s -o result\\%s-%s.json", url, currentData, host)
+	cmd := exec.Command("cmd", "/C", com)
+	cmd.Dir = EHolefile
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
+	err = cmd.Run()
+	flags := cmd.Wait()
+	if flags == nil {
+		fmt.Println("EHole运行结束")
+	}
 
-	*/
 	resultFilePath := EHoleresultFilePath + currentData + "-" + host + ".json"
 	resultFile, err := os.Stat(resultFilePath)
 	if err == nil && resultFile.Size() > 0 {

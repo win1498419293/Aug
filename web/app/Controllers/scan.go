@@ -188,7 +188,7 @@ func PutWebinfo(c *gin.Context) {
 	//	lib.Dirsearchscan(json.Url, json.Thread)
 	color.Magenta("目录扫描结束")
 	color.Cyan("开始指纹识别")
-	lib.FingerScan(json.Url, json.Flag)
+	lib.FingerScan(json.Flag, json.Url)
 	//lib.EHolescan(json.Url,json.)
 	color.Cyan("指纹识别结束")
 	color.Yellow("开始vulmap扫描")

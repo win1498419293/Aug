@@ -5342,3 +5342,8 @@ drwxr-xr-x 3 root root 4.0K Apr  5  2023 tools
 [log]2023/10/10 17:03:46 ssh.go:124: Check... 101.43.49.191 eSER!@# mysql
 [log]2023/10/10 17:03:46 ssh.go:124: Check... 101.43.49.191 eSER!@# apache
 [log]2023/10/10 17:03:46 ssh.go:124: Check... 101.43.49.191 eSER!@# 
+[log]2023/11/13 11:38:17 smb.go:23: [!] dial tcp: lookup 47.95.245.1/24: no such host
+[log]2023/11/13 11:38:17 smb.go:23: [!] dial tcp: lookup 47.95.245.1/24: no such host
+[log]2023/11/13 11:38:17 smb.go:23: [!] dial tcp: lookup 47.95.245.1/24: no such host
+[log]2023/11/13 11:38:17 smb.go:23: [!] dial tcp: lookup 47.95.245.1/24: no such host
+[log]2023/11/13 11:38:17 smb.go:23: [!] dial tcp: lookup 47.95.245.1/24: no such host

@@ -1,1 +1,2 @@
 
+[log]2023/11/13 11:32:42 smb.go:23: [!] dial tcp: lookup 47.95.245.1/24: no such host

@@ -265,7 +265,7 @@ func Scan(src, url string, thread int) {
 		Webscreenshot(value["url"])
 		fmt.Println("正在扫描第", sum, "个url，还有", num, "需要url扫描")
 		color.Cyan("开始指纹识别")
-		FingerScan(value["url"], flags)
+		FingerScan(flags, value["url"])
 		EHolescan(value["url"], output)
 		color.Cyan("指纹识别结束")
 		color.Yellow("开始vulmap扫描")
@@ -398,11 +398,14 @@ func scanmode() {
 		start := time.Now() // 获取当前时间
 		if file == "" {
 			c.Printf("%s开始指纹扫描:", urls)
+			fmt.Println()
 			EHolescan(urls, output)
+			FingerScan(flags, urls, output)
 		} else {
 			txts := Readfile(file)
 			for i := 0; i < len(txts); i++ {
 				EHolescan(txts[i], output)
+				FingerScan(flags, txts[i], output)
 			}
 		}
 		elapsed := time.Since(start)
@@ -447,7 +450,7 @@ func scanmode() {
 		fmt.Println()
 		if file == "" {
 			color.Cyan("开始指纹识别")
-			FingerScan(urls, flags)
+			FingerScan(flags, urls)
 			EHolescan(urls, output)
 			color.Cyan("指纹识别结束")
 			color.Yellow("开始vulmap扫描")
@@ -467,7 +470,7 @@ func scanmode() {
 			// 读取全部返回的urls，判断没有协议就加上协议
 			for i := 0; i < len(txts)-1; i++ {
 				color.Cyan("%s:开始指纹识别", txts[i])
-				FingerScan(txts[i], flags)
+				FingerScan(flags, txts[i])
 				EHolescan(txts[i], output)
 				color.Cyan("%s:指纹识别结束", txts[i])
 				color.Yellow("%s:开始vulmap扫描", txts[i])
@@ -552,7 +555,7 @@ func scanmode() {
 			Dirsearchscan(urls, thread)
 			color.Magenta("目录扫描结束")
 			color.Cyan("开始指纹识别")
-			FingerScan(urls, flags)
+			FingerScan(flags, urls)
 			EHolescan(urls, output)
 			color.Cyan("指纹识别结束")
 			color.Yellow("开始vulmap扫描")
@@ -587,7 +590,8 @@ func scanmode() {
 		runhtml()
 	case "cs":
 		start := time.Now() // 获取当前时间
-		c.Printf("%s开始c段扫描: ", ip)
+		c.Println("%s开始c段扫描: ", ip)
+		fmt.Println()
 		cscan(ip)
 		c.Printf("%s扫描完成: ", ip)
 		Weak_Pass_Burst.SshScan("sshscan", ip)

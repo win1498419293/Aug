@@ -267,7 +267,7 @@ func IpScan(flag bool, params ...string) {
 		results := fmt.Sprintf("%s  %s %s %s \r\n ", value["Target"], value["Title"], value["Banner"], value["Service"])
 		if path != "" {
 			//不存活的端口不写入文件
-			if value["Title"] != "" && value["Banner"] != "" {
+			if value["Service"] != "" && value["Title"] != "" {
 				savetxt(results, path)
 			}
 		}
