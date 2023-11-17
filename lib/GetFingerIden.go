@@ -97,21 +97,26 @@ func EHolescan(url, path string) {
 			fmt.Println("Recovered:", r)
 		}
 	}()
-	EHoleresultFilePath := Readyaml("EHole.resultFilePath")
-	EHolefile := Readyaml("EHole.EHoleexe")
-	//只有域名的话，添加协议
-	if !strings.Contains(url, "http") {
-		url = "http://" + url
-	}
 	fingerScan, err := os.OpenFile("log/fingerScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	now := time.Now()
 	currentData := now.Format("2006-01-02")
+	EHoleresultFilePath := Readyaml("EHole.resultFilePath")
+	EHolefile := Readyaml("EHole.EHoleexe")
+	isfiles := isfile(url)
+	com := ""
 
-	_, host := Urlchange(url)
-	host = strings.Replace(host, ":", "-", 1)
-	host = strings.Replace(host, ".", "-", -1)
-
-	com := fmt.Sprintf("EHole finger -u %s -o result\\%s-%s.json", url, currentData, host)
+	if isfiles {
+		com = fmt.Sprintf("EHole finger -l %s -o result\\%s.json", url, currentData)
+	} else {
+		//只有域名的话，添加协议
+		if !strings.Contains(url, "http") {
+			url = "http://" + url
+		}
+		_, host := Urlchange(url)
+		host = strings.Replace(host, ":", "-", 1)
+		host = strings.Replace(host, ".", "-", -1)
+		com = fmt.Sprintf("EHole finger -u %s -o result\\%s-%s.json", url, currentData, host)
+	}
 	cmd := exec.Command("cmd", "/C", com)
 	cmd.Dir = EHolefile
 	var out bytes.Buffer
@@ -123,8 +128,15 @@ func EHolescan(url, path string) {
 	if flags == nil {
 		fmt.Println("EHole运行结束")
 	}
-
-	resultFilePath := EHoleresultFilePath + currentData + "-" + host + ".json"
+	resultFilePath := ""
+	if isfiles {
+		_, host := Urlchange(url)
+		host = strings.Replace(host, ":", "-", 1)
+		host = strings.Replace(host, ".", "-", -1)
+		resultFilePath = EHoleresultFilePath + currentData + "-" + host + ".json"
+	} else {
+		resultFilePath = EHoleresultFilePath + currentData + ".json"
+	}
 	resultFile, err := os.Stat(resultFilePath)
 	if err == nil && resultFile.Size() > 0 {
 		resutl := GetEHoleresult(resultFilePath)
@@ -158,4 +170,16 @@ func GetEHoleresult(path string) map[string]interface{} {
 	Eholejson["statuscode"] = info[0].Statuscode
 	Eholejson["length"] = info[0].Length
 	return Eholejson
+}
+
+func isfile(url string) bool {
+	isfile, err := os.Stat(url)
+	if err != nil {
+		fmt.Println(url, "不是一个文件.")
+		return false
+	}
+	if isfile.Mode().IsRegular() {
+		return true
+	}
+	return false
 }

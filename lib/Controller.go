@@ -615,7 +615,8 @@ func scanmode() {
 	}
 }
 func Startmain() {
-	scanmode()
+	//scanmode()
+	mod("https://hongkong-u8server.mgp.mi.com")
 	//Webscreenshot(urls)
 	//lib.MssqlScan("MSSQLSCAN", "1.116.24.217")
 	//cscan("104.21.43.32")
