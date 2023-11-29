@@ -369,22 +369,7 @@ func Nucleiscan(url, src string, flag bool) {
 	c := color.New()
 	c.Add(color.FgRed, color.Bold)
 	XScanlog, err := os.OpenFile("log/XScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	regstr := `\d+\.\d+\.\d+\.\d+`   //两个及两个以上空格的正则表达式
-	reg, _ := regexp.Compile(regstr) //编译正则表达式
-	ip := reg.Find([]byte(url))
-	//只有域名的话，添加协议
-	if !strings.Contains(url, "http") {
-		url = "http://" + url
-	}
-	//ip或者url
-	dom := ""
-	//如果匹配ip识别则获取host，否则获取ip
-	if ip == nil {
-		_, domain := Urlchange(url)
-		dom = domain
-	} else {
-		dom = string(ip)
-	}
+
 	nucleiresultFilePath := Readyaml("nuclei.resultFilePath")
 	nucleiexe := Readyaml("nuclei.nucleiexe")
 	resultfile, err := os.Stat(nucleiresultFilePath)
@@ -393,7 +378,21 @@ func Nucleiscan(url, src string, flag bool) {
 	}
 	now := time.Now()
 	currentData := now.Format("2006-01-02")
-	cmd := exec.Command("./nuclei.exe", "-u", url, "-json", "-o", "result\\"+currentData+dom+".json")
+	isfiles := isfile(url)
+	com := ""
+	if isfiles {
+		com = fmt.Sprintf("nuclei  -l %s -o result\\%s.json", url, currentData)
+	} else {
+		//只有域名的话，添加协议
+		if !strings.Contains(url, "http") {
+			url = "http://" + url
+		}
+		_, host := Urlchange(url)
+		host = strings.Replace(host, ":", "-", 1)
+		host = strings.Replace(host, ".", "-", -1)
+		com = fmt.Sprintf("nuclei  -u %s -o result\\%s-%s.json", url, currentData, host)
+	}
+	cmd := exec.Command("cmd", "/C", com)
 	cmd.Dir = nucleiexe
 	var out bytes.Buffer
 	var stderr bytes.Buffer
@@ -407,7 +406,19 @@ func Nucleiscan(url, src string, flag bool) {
 	if flags == nil {
 		fmt.Println("运行结束")
 	}
-	resultFilePath := nucleiresultFilePath + currentData + dom + ".json"
+	resultFilePath := ""
+	if isfiles {
+		resultFilePath = nucleiresultFilePath + currentData + ".json"
+	} else {
+		//只有域名的话，添加协议
+		if !strings.Contains(url, "http") {
+			url = "http://" + url
+		}
+		_, host := Urlchange(url)
+		host = strings.Replace(host, ":", "-", 1)
+		host = strings.Replace(host, ".", "-", -1)
+		resultFilePath = nucleiresultFilePath + currentData + "-" + host + ".json"
+	}
 	resultFile, err := os.Stat(resultFilePath)
 	if err == nil && resultFile.Size() > 0 {
 		if resultFile.Size() > 0 {
@@ -511,33 +522,30 @@ func Vulmapscan(url, src string, thread int, flag bool) {
 	c := color.New()
 	c.Add(color.FgRed, color.Bold)
 	XScanlog, err := os.OpenFile("log/XScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	regstr := `\d+\.\d+\.\d+\.\d+`   //两个及两个以上空格的正则表达式
-	reg, _ := regexp.Compile(regstr) //编译正则表达式
-	ip := reg.Find([]byte(url))
-	//只有域名的话，添加协议
-	if !strings.Contains(url, "http") {
-		url = "http://" + url
-	}
-
-	//ip或者url
-	dom := ""
-	//如果匹配ip识别则获取host，否则获取ip
-	if ip == nil {
-		_, domain := Urlchange(url)
-		dom = domain
-	} else {
-		dom = string(ip)
-	}
-
 	vulmapresultFilePath := Readyaml("vulmap.resultFilePath")
 	Vulmapfile := Readyaml("vulmap.vulmapfile")
 	resultfile, err := os.Stat(vulmapresultFilePath)
 	if !(err == nil && resultfile.Size() > 0) {
 		os.Mkdir(vulmapresultFilePath, os.ModePerm)
 	}
+
+	isfiles := isfile(url)
 	now := time.Now()
 	currentData := now.Format("2006-01-02")
-	com := "python vulmap.py -t " + strconv.Itoa(thread) + " -u " + url + " --output-json  result\\" + currentData + dom + ".txt"
+	com := ""
+	if isfiles {
+		com = "python vulmap.py -t " + strconv.Itoa(thread) + " -f " + url + " --output-json  result\\" + currentData + ".txt"
+	} else {
+		//只有域名的话，添加协议
+		if !strings.Contains(url, "http") {
+			url = "http://" + url
+		}
+		_, host := Urlchange(url)
+		host = strings.Replace(host, ":", "-", 1)
+		host = strings.Replace(host, ".", "-", -1)
+		com = "python vulmap.py -t " + strconv.Itoa(thread) + " -u " + url + " --output-json  result\\" + currentData + host + ".txt"
+	}
+
 	cmd := exec.Command("cmd", "/c", com)
 	cmd.Dir = Vulmapfile
 	var out bytes.Buffer
@@ -548,12 +556,21 @@ func Vulmapscan(url, src string, thread int, flag bool) {
 	if err != nil {
 		log.Fatalf("Vulmapscan cmd.Run() failed with %s\n", err, stderr.String())
 	}
-	flags := cmd.Wait()
-	if flags == nil {
-		fmt.Println("运行结束")
+	resultFilePath := ""
+	if isfiles {
+		resultFilePath = vulmapresultFilePath + currentData + ".json"
+	} else {
+		//只有域名的话，添加协议
+		if !strings.Contains(url, "http") {
+			url = "http://" + url
+		}
+		_, host := Urlchange(url)
+		host = strings.Replace(host, ":", "-", 1)
+		host = strings.Replace(host, ".", "-", -1)
+		resultFilePath = vulmapresultFilePath + currentData + "-" + host + ".json"
 	}
-	resultFilePath := fmt.Sprintf(vulmapresultFilePath+"%s.txt", currentData+dom)
 	resultFile, err := os.Stat(resultFilePath)
+
 	if err == nil && resultFile.Size() > 0 {
 		gvr := GetVulmapJsonResult(resultFilePath)
 		for _, vaule := range gvr {
@@ -725,27 +742,10 @@ func GetVulmapJsonResult(path string) map[int]map[string]string {
 
 // flag 用来判断是否需要将扫描到的漏洞插入到数据库
 func Pocbomberscan(url, src string, thread int, flag bool) {
-
 	c := color.New()
 	c.Add(color.FgRed, color.Bold)
 	now := time.Now()
 	XScanlog, err := os.OpenFile("log/XScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	regstr := `\d+\.\d+\.\d+\.\d+`   //两个及两个以上空格的正则表达式
-	reg, _ := regexp.Compile(regstr) //编译正则表达式
-	ip := reg.Find([]byte(url))
-	//只有域名的话，添加协议
-	if !strings.Contains(url, "http") {
-		url = "http://" + url
-	}
-	//ip或者url
-	dom := ""
-	//如果匹配ip识别则获取host，否则获取ip
-	if ip == nil {
-		_, domain := Urlchange(url)
-		dom = domain
-	} else {
-		dom = string(ip)
-	}
 	pocbomberresultFilePath := Readyaml("POC_bomber.resultFilePath")
 	pocbomberfile := Readyaml("POC_bomber.POC_bomberfile")
 	resultfile, err := os.Stat(pocbomberresultFilePath)
@@ -754,7 +754,20 @@ func Pocbomberscan(url, src string, thread int, flag bool) {
 	}
 	currentData := now.Format("2006-01-02")
 	currenttime := now.Format("2006-01-02 02:23:23")
-	com := "python pocbomber.py -t " + strconv.Itoa(thread) + " -u " + url + " -o  result\\" + currentData + dom + ".txt"
+	isfiles := isfile(url)
+	com := ""
+	if isfiles {
+		com = "python pocbomber.py -t " + strconv.Itoa(thread) + " -f " + url + " -o  result\\" + currentData + ".txt"
+	} else {
+		//只有域名的话，添加协议
+		if !strings.Contains(url, "http") {
+			url = "http://" + url
+		}
+		_, host := Urlchange(url)
+		host = strings.Replace(host, ":", "-", 1)
+		host = strings.Replace(host, ".", "-", -1)
+		com = "python pocbomber.py -t " + strconv.Itoa(thread) + " -u " + url + " -o  result\\" + currentData + host + ".txt"
+	}
 	cmd := exec.Command("cmd", "/c", com)
 	cmd.Dir = pocbomberfile
 	var out bytes.Buffer
@@ -769,7 +782,19 @@ func Pocbomberscan(url, src string, thread int, flag bool) {
 	if flags == nil {
 		fmt.Println("运行结束")
 	}
-	resultFilePath := fmt.Sprintf(pocbomberresultFilePath+"%s.txt", currentData+dom)
+	resultFilePath := ""
+	if isfiles {
+		resultFilePath = pocbomberresultFilePath + currentData + ".json"
+	} else {
+		//只有域名的话，添加协议
+		if !strings.Contains(url, "http") {
+			url = "http://" + url
+		}
+		_, host := Urlchange(url)
+		host = strings.Replace(host, ":", "-", 1)
+		host = strings.Replace(host, ".", "-", -1)
+		resultFilePath = pocbomberresultFilePath + currentData + "-" + host + ".json"
+	}
 	resultFile, err := os.Stat(resultFilePath)
 	if err == nil && resultFile.Size() > 0 {
 		gjr := GetPocbomberResult(resultFilePath)
@@ -1035,21 +1060,30 @@ func Dirscan(url string, thread int) {
 
 func FindSomeThingscan(url, src string, flag bool) {
 	XScanlog, err := os.OpenFile("log/XScan.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-
 	FindSomeThingresultFilePath := Readyaml("FindSomeThing.resultFilePath")
-
 	FindSomeThingfile := Readyaml("FindSomeThing.FindSomeThingfile")
 	resultfile, err := os.Stat(FindSomeThingresultFilePath)
-
 	if !(err == nil && resultfile.Size() > 0) {
 		os.Mkdir(FindSomeThingresultFilePath, os.ModePerm)
 	}
-	//只有域名的话，添加协议
-	if !strings.Contains(url, "http") {
-		url = "http://" + url
+	now := time.Now()
+	currentData := now.Format("2006-01-02")
+	isfiles := isfile(url)
+	com := ""
+	if isfiles {
+		com = "python scan.py -l " + url + "-o result\\" + currentData + "-" + ".txt"
+	} else {
+		//只有域名的话，添加协议
+		if !strings.Contains(url, "http") {
+			url = "http://" + url
+		}
+		_, host := Urlchange(url)
+		host = strings.Replace(host, ":", "-", 1)
+		host = strings.Replace(host, ".", "-", -1)
+		com = "python scan.py -u " + url + "-o result\\" + currentData + "-" + host + ".txt"
 	}
-	com := "python scan.py -u " + url
-	cmd := exec.Command("cmd", "/c", com)
+
+	cmd := exec.Command("cmd", "/C", com)
 	cmd.Dir = FindSomeThingfile
 	var out bytes.Buffer
 	var stderr bytes.Buffer
@@ -1063,10 +1097,20 @@ func FindSomeThingscan(url, src string, flag bool) {
 	if flags == nil {
 		fmt.Println("运行结束")
 	}
-
-	resultFilePath := FindSomeThingresultFilePath + "/report.txt"
+	resultFilePath := ""
+	if isfiles {
+		resultFilePath = FindSomeThingresultFilePath + currentData + ".txt"
+	} else {
+		//只有域名的话，添加协议
+		if !strings.Contains(url, "http") {
+			url = "http://" + url
+		}
+		_, host := Urlchange(url)
+		host = strings.Replace(host, ":", "-", 1)
+		host = strings.Replace(host, ".", "-", -1)
+		resultFilePath = FindSomeThingresultFilePath + currentData + "-" + host + ".txt"
+	}
 	resultFile, err := os.Stat(resultFilePath)
-	now := time.Now()
 	currenttime := now.Format("2006-01-02 02:23:23")
 	if err == nil && resultFile.Size() > 0 {
 		//获取扫描结果

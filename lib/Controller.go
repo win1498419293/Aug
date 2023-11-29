@@ -402,11 +402,8 @@ func scanmode() {
 			EHolescan(urls, output)
 			FingerScan(flags, urls, output)
 		} else {
-			txts := Readfile(file)
-			for i := 0; i < len(txts); i++ {
-				EHolescan(txts[i], output)
-				FingerScan(flags, txts[i], output)
-			}
+			EHolescan(file, output)
+			FingerScan(flags, file, output)
 		}
 		elapsed := time.Since(start)
 		color.Cyan("执行完成耗时：%s", elapsed)
@@ -466,26 +463,23 @@ func scanmode() {
 			FindSomeThingscan(urls, src, flags)
 			color.Green("Find-SomeThing扫描结束")
 		} else {
-			txts := Readfile(file)
-			// 读取全部返回的urls，判断没有协议就加上协议
-			for i := 0; i < len(txts)-1; i++ {
-				color.Cyan("%s:开始指纹识别", txts[i])
-				FingerScan(flags, txts[i])
-				EHolescan(txts[i], output)
-				color.Cyan("%s:指纹识别结束", txts[i])
-				color.Yellow("%s:开始vulmap扫描", txts[i])
-				Vulmapscan(txts[i], src, thread, flags)
-				color.Yellow("%s:vulmap扫描结束", txts[i])
-				color.Red("%s:开始nuclei扫描", txts[i])
-				Nucleiscan(txts[i], src, flags)
-				color.Red("%s:nuclei扫描结束", txts[i])
-				color.White("%s:开始pocbomber扫描", txts[i])
-				Pocbomberscan(txts[i], src, thread, flags)
-				color.White("%s:pocbomber扫描结束", txts[i])
-				color.Green("开始Find-SomeThing扫描")
-				FindSomeThingscan(txts[i], src, flags)
-				color.Green("Find-SomeThing扫描结束")
-			}
+			color.Cyan("%s:开始指纹识别", file)
+			FingerScan(flags, file)
+			EHolescan(file, output)
+			color.Cyan("%s:指纹识别结束", file)
+			color.Yellow("%s:开始vulmap扫描", file)
+			Vulmapscan(file, src, thread, flags)
+			color.Yellow("%s:vulmap扫描结束", file)
+			color.Red("%s:开始nuclei扫描", file)
+			Nucleiscan(file, src, flags)
+			color.Red("%s:nuclei扫描结束", file)
+			color.White("%s:开始pocbomber扫描", file)
+			Pocbomberscan(file, src, thread, flags)
+			color.White("%s:pocbomber扫描结束", file)
+			color.Green("开始Find-SomeThing扫描")
+			FindSomeThingscan(file, src, flags)
+			color.Green("Find-SomeThing扫描结束")
+
 		}
 
 		c.Printf("%s漏洞扫描完成 ", urls)
@@ -615,8 +609,9 @@ func scanmode() {
 	}
 }
 func Startmain() {
-	//scanmode()
-	mod("https://hongkong-u8server.mgp.mi.com")
+	scanmode()
+	//EHolescan("D:\\JDK\\GDK\\gopath\\Aug\\urls.txt", "")
+	//FingerScan(false, "https://pinshang.mi.com ")
 	//Webscreenshot(urls)
 	//lib.MssqlScan("MSSQLSCAN", "1.116.24.217")
 	//cscan("104.21.43.32")

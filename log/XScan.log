@@ -884,3 +884,7 @@
 'm' 不是内部或外部命令，也不是可运行的程序
 或批处理文件。
 )
+2023/11/29 15:13:45 FindSomeThingscan cmd.Run() failed with exit status 2
+%!(EXTRA string=usage: scan.py [-h] [-u URL] [-f FILE] [-m] [-p] [-o OUTPUTURL] [-i] [-up]
+scan.py: error: unrecognized arguments: result\2023-11-29-36-155-98-112-8080.txt
+)
